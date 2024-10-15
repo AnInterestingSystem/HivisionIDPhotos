@@ -18,7 +18,6 @@ build
 # checkpoint
 *.pth
 *.pt
-*.onnx
 *.mnn
 test/temp/*
 !test/temp/.gitkeep
