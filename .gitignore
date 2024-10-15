@@ -1,26 +1,20 @@
 *.pyc
 **/__pycache__/
-.idea
-.vscode/*
+.gradio/
+.idea/
+.vscode/
 .history
 .DS_Store
-.env
 demo/kb_output/*.jpg
 demo/kb_output/*.png
-scripts/sync_swanhub.py
-scripts/sync_huggingface.py
-scripts/sync_modelscope.py
-scripts/sync_all.py
 **/flagged/
 # build outputs
-dist
-build
+dist/
+build/
 # checkpoint
 *.pth
 *.pt
 *.mnn
-test/temp/*
-!test/temp/.gitkeep
 
 .python-version
 
