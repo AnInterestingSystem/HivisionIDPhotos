@@ -9,14 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY requirements.txt requirements-app.txt ./
+COPY requirements.txt ./
 
-RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY demo ./demo
 COPY hivision ./hivision
 COPY app.py .
-COPY app.spec .
 
 EXPOSE 8080
 

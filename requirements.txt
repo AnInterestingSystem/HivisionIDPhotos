@@ -5,3 +5,6 @@ requests
 mtcnn-runtime
 tqdm
 starlette
+
+gradio>=4.43.0
+fastapi
