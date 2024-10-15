@@ -8,3 +8,4 @@ starlette
 
 gradio>=4.43.0
 fastapi
+uvicorn
