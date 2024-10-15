@@ -22,8 +22,8 @@ def load_description(fp):
 def create_ui(
     processor: IDPhotoProcessor,
     root_dir: str,
-    human_matting_models: list,
-    face_detect_models: list,
+    # human_matting_models: list,
+    # face_detect_models: list,
     language: list,
 ):
 
@@ -33,15 +33,15 @@ def create_ui(
     else:
         DEFAULT_LANG = language[0]
 
-    DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
-    DEFAULT_FACE_DETECT_MODEL = "retinaface-resnet50"
-
-    if DEFAULT_HUMAN_MATTING_MODEL in human_matting_models:
-        human_matting_models.remove(DEFAULT_HUMAN_MATTING_MODEL)
-        human_matting_models.insert(0, DEFAULT_HUMAN_MATTING_MODEL)
-
-    if DEFAULT_FACE_DETECT_MODEL not in face_detect_models:
-        DEFAULT_FACE_DETECT_MODEL = "mtcnn"
+    # DEFAULT_HUMAN_MATTING_MODEL = "rmbg-1.4"
+    # DEFAULT_FACE_DETECT_MODEL = "retinaface-resnet50"
+    #
+    # if DEFAULT_HUMAN_MATTING_MODEL in human_matting_models:
+    #     human_matting_models.remove(DEFAULT_HUMAN_MATTING_MODEL)
+    #     human_matting_models.insert(0, DEFAULT_HUMAN_MATTING_MODEL)
+    #
+    # if DEFAULT_FACE_DETECT_MODEL not in face_detect_models:
+    #     DEFAULT_FACE_DETECT_MODEL = "mtcnn"
 
     demo = gr.Blocks(title="HivisionIDPhotos")
 
@@ -60,17 +60,17 @@ def create_ui(
                         value=DEFAULT_LANG,
                     )
 
-                    face_detect_model_options = gr.Dropdown(
-                        choices=face_detect_models,
-                        label=LOCALES["face_model"][DEFAULT_LANG]["label"],
-                        value=DEFAULT_FACE_DETECT_MODEL,
-                    )
-
-                    matting_model_options = gr.Dropdown(
-                        choices=human_matting_models,
-                        label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
-                        value=human_matting_models[0],
-                    )
+                    # face_detect_model_options = gr.Dropdown(
+                    #     choices=face_detect_models,
+                    #     label=LOCALES["face_model"][DEFAULT_LANG]["label"],
+                    #     value=DEFAULT_FACE_DETECT_MODEL,
+                    # )
+                    #
+                    # matting_model_options = gr.Dropdown(
+                    #     choices=human_matting_models,
+                    #     label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
+                    #     value=human_matting_models[0],
+                    # )
 
                 # TAB1 - 关键参数 ------------------------------------------------
                 with gr.Tab(
@@ -413,12 +413,12 @@ def create_ui(
             # ---------------- 多语言切换函数 ----------------
             def change_language(language):
                 return {
-                    face_detect_model_options: gr.update(
-                        label=LOCALES["face_model"][language]["label"]
-                    ),
-                    matting_model_options: gr.update(
-                        label=LOCALES["matting_model"][language]["label"]
-                    ),
+                    # face_detect_model_options: gr.update(
+                    #     label=LOCALES["face_model"][language]["label"]
+                    # ),
+                    # matting_model_options: gr.update(
+                    #     label=LOCALES["matting_model"][language]["label"]
+                    # ),
                     size_list_options: gr.update(
                         label=LOCALES["size_list"][language]["label"],
                         choices=LOCALES["size_list"][language]["choices"],
@@ -630,8 +630,8 @@ def create_ui(
                     img_but,
                     render_options,
                     image_kb_options,
-                    matting_model_options,
-                    face_detect_model_options,
+                    # matting_model_options,
+                    # face_detect_model_options,
                     custom_image_kb_size,
                     notification,
                     img_output_standard,
@@ -723,7 +723,7 @@ def create_ui(
                     custom_size_width_mm,
                     custom_image_kb_size,
                     language_options,
-                    matting_model_options,
+                    # matting_model_options,
                     watermark_options,
                     watermark_text_options,
                     watermark_text_color,
@@ -731,7 +731,7 @@ def create_ui(
                     watermark_text_opacity,
                     watermark_text_angle,
                     watermark_text_space,
-                    face_detect_model_options,
+                    # face_detect_model_options,
                     head_measure_ratio_option,
                     top_distance_option,
                     whitening_option,

@@ -62,7 +62,7 @@ async def idphoto_inference(
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
-    choose_handler(creator, human_matting_model, face_detect_model)
+    choose_handler(creator)
 
     # 将字符串转为元组
     size = (int(height), int(width))
@@ -110,7 +110,7 @@ async def human_matting_inference(
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
-    choose_handler(creator, human_matting_model, None)
+    choose_handler(creator)
 
     try:
         result = creator(
@@ -317,7 +317,7 @@ async def idphoto_crop_inference(
         img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)  # 读取图像(4通道)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
-    choose_handler(creator, face_detect_option=face_detect_model)
+    choose_handler(creator)
 
     # 将字符串转为元组
     size = (int(height), int(width))

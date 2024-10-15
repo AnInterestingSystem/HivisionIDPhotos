@@ -2,7 +2,7 @@ import argparse
 import os
 from demo.processor import IDPhotoProcessor
 from demo.ui import create_ui
-from hivision.creator.choose_handler import HUMAN_MATTING_MODELS
+# from hivision.creator.choose_handler import HUMAN_MATTING_MODELS
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -15,28 +15,28 @@ HUMAN_MATTING_MODELS_EXIST = [
     if file.endswith(".onnx") or file.endswith(".mnn")
 ]
 # 在HUMAN_MATTING_MODELS中的模型才会被加载到Gradio中显示
-HUMAN_MATTING_MODELS_CHOICE = [
-    model for model in HUMAN_MATTING_MODELS if model in HUMAN_MATTING_MODELS_EXIST
-]
+# HUMAN_MATTING_MODELS_CHOICE = [
+#     model for model in HUMAN_MATTING_MODELS if model in HUMAN_MATTING_MODELS_EXIST
+# ]
 
-if len(HUMAN_MATTING_MODELS_CHOICE) == 0:
-    raise ValueError(
-        "未找到任何存在的人像分割模型，请检查 hivision/creator/weights 目录下的文件"
-        + "\n"
-        + "No existing portrait segmentation model was found, please check the files in the hivision/creator/weights directory."
-    )
+# if len(HUMAN_MATTING_MODELS_CHOICE) == 0:
+#     raise ValueError(
+#         "未找到任何存在的人像分割模型，请检查 hivision/creator/weights 目录下的文件"
+#         + "\n"
+#         + "No existing portrait segmentation model was found, please check the files in the hivision/creator/weights directory."
+#     )
 
-FACE_DETECT_MODELS = ["face++ (联网Online API)", "mtcnn"]
-FACE_DETECT_MODELS_EXPAND = (
-    ["retinaface-resnet50"]
-    if os.path.exists(
-        os.path.join(
-            root_dir, "hivision/creator/retinaface/weights/retinaface-resnet50.onnx"
-        )
-    )
-    else []
-)
-FACE_DETECT_MODELS_CHOICE = FACE_DETECT_MODELS + FACE_DETECT_MODELS_EXPAND
+# FACE_DETECT_MODELS = ["face++ (联网Online API)", "mtcnn"]
+# FACE_DETECT_MODELS_EXPAND = (
+#     ["retinaface-resnet50"]
+#     if os.path.exists(
+#         os.path.join(
+#             root_dir, "hivision/creator/retinaface/weights/retinaface-resnet50.onnx"
+#         )
+#     )
+#     else []
+# )
+# FACE_DETECT_MODELS_CHOICE = FACE_DETECT_MODELS + FACE_DETECT_MODELS_EXPAND
 
 LANGUAGE = ["zh", "en", "ko", "ja"]
 
@@ -61,8 +61,8 @@ if __name__ == "__main__":
     demo = create_ui(
         processor,
         root_dir,
-        HUMAN_MATTING_MODELS_CHOICE,
-        FACE_DETECT_MODELS_CHOICE,
+        # HUMAN_MATTING_MODELS_CHOICE,
+        # FACE_DETECT_MODELS_CHOICE,
         LANGUAGE,
     )
     

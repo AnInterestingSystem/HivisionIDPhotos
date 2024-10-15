@@ -43,7 +43,7 @@ class IDPhotoProcessor:
         custom_size_width_mm,
         custom_image_kb,
         language,
-        matting_model_option,
+        # matting_model_option,
         watermark_option,
         watermark_text,
         watermark_text_color,
@@ -51,7 +51,7 @@ class IDPhotoProcessor:
         watermark_text_opacity,
         watermark_text_angle,
         watermark_text_space,
-        face_detect_option,
+        # face_detect_option,
         head_measure_ratio=0.2,
         top_distance_max=0.12,
         whitening_strength=0,
@@ -132,7 +132,7 @@ class IDPhotoProcessor:
 
         # 创建IDCreator实例并设置处理器
         creator = IDCreator()
-        choose_handler(creator, matting_model_option, face_detect_option)
+        choose_handler(creator)
 
         # 生成证件照
         try:
