@@ -20,4 +20,4 @@ COPY app.spec .
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+CMD ["python", "app.py", "--port", "8080"]
