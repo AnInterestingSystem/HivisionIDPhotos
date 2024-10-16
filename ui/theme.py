@@ -29,4 +29,8 @@ theme.set(
     # button
     button_primary_background_fill="#81c8e0",
     button_primary_background_fill_hover="#1677ff",
+
+    #input
+    input_border_color_focus="#f0fbfe",
+    input_background_fill_focus="#81c8e0",
 )

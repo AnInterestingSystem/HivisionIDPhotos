@@ -27,7 +27,6 @@ size_list_dict_EN = csv_to_size_list(os.path.join(base_dir, "assets/size_list_EN
     color_list_dict_EN,
 ) = load_configuration(base_dir)
 
-
 LOCALES = {
     "face_model": {
         "en": {
@@ -55,6 +54,34 @@ LOCALES = {
         },
         "ko": {
             "label": "매팅 모델",
+        },
+    },
+    "language_type": {
+        "en": {
+            "label": "Language Type",
+        },
+        "zh": {
+            "label": "语种",
+        },
+        "ja": {
+            "label": "言語種",
+        },
+        "ko": {
+            "label": "언어 종류",
+        },
+    },
+    "input_photo": {
+        "en": {
+            "label": "Photo",
+        },
+        "zh": {
+            "label": "图片",
+        },
+        "ja": {
+            "label": "写真",
+        },
+        "ko": {
+            "label": "사진",
         },
     },
     "key_param": {
@@ -465,6 +492,20 @@ LOCALES = {
             "label": "워터마크",
             "value": "추가하지 않음",
             "choices": ["추가하지 않음", "추가"],
+        },
+    },
+    "examples": {
+        "en": {
+            "label": "Examples",
+        },
+        "zh": {
+            "label": "样例",
+        },
+        "ja": {
+            "label": "見本",
+        },
+        "ko": {
+            "label": "견본",
         },
     },
     # 输出结果
