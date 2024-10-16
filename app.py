@@ -3,9 +3,9 @@ import os
 
 import gradio as gr
 
-from demo.processor import IDPhotoProcessor
-from demo.theme import theme
-from demo.ui import create_ui
+from ui .processor import IDPhotoProcessor
+from ui.theme import theme
+from ui.ui import create_ui
 
 LANGUAGE = ["zh", "en", "ko", "ja"]
 
