@@ -8,6 +8,7 @@ r"""
     证件照创建上下文类，用于同步信息
 """
 from typing import Optional, Callable, Tuple
+
 import numpy as np
 
 
@@ -19,7 +20,7 @@ class Params:
         crop_only: bool = False,
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
-        head_top_range: float = (0.12, 0.1),
+        head_top_range: tuple[float, float] = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
         brightness_strength: int = 0,
@@ -96,15 +97,7 @@ class Params:
 
 
 class Result:
-    def __init__(
-        self,
-        standard: np.ndarray,
-        hd: np.ndarray,
-        matting: np.ndarray,
-        clothing_params: Optional[dict],
-        typography_params: Optional[dict],
-        face: Optional[Tuple[int, int, int, int, float]],
-    ):
+    def __init__(self, standard: np.ndarray, hd: np.ndarray, matting: np.ndarray, clothing_params: Optional[dict], typography_params: Optional[dict], face: Optional[dict]):
         self.standard = standard
         self.hd = hd
         self.matting = matting
@@ -119,16 +112,14 @@ class Result:
         self.face = face
 
     def __iter__(self):
-        return iter(
-            [
-                self.standard,
-                self.hd,
-                self.matting,
-                self.clothing_params,
-                self.typography_params,
-                self.face,
-            ]
-        )
+        return iter([
+            self.standard,
+            self.hd,
+            self.matting,
+            self.clothing_params,
+            self.typography_params,
+            self.face,
+        ])
 
 
 class Context:

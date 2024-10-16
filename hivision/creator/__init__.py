@@ -13,7 +13,7 @@ from typing import Tuple
 import cv2
 import numpy as np
 
-import hivision.creator.utils as U
+import hivision.creator.utils as u
 from hivision.plugin.beauty.handler import beauty_face
 from .context import Context, ContextHandler, Params, Result
 from .face_detector import detect_face_mtcnn
@@ -71,9 +71,9 @@ class IDCreator:
         """
         证件照处理函数
         :param image: 输入图像
+        :param size: 输出的图像大小（h,w)
         :param change_bg_only: 是否只需要抠图
         :param crop_only: 是否只需要裁剪
-        :param size: 输出的图像大小（h,w)
         :param head_measure_ratio: 人脸面积与全图面积的期望比值
         :param head_height_ratio: 人脸中心处在全图高度的比例期望值
         :param head_top_range: 头距离顶部的比例（max,min)
@@ -82,7 +82,7 @@ class IDCreator:
         :param brightness_strength: 亮度强度
         :param contrast_strength: 对比度强度
         :param sharpen_strength: 锐化强度
-        :param align_face: 是否需要人脸矫正
+        :param face_alignment: 是否需要人脸矫正
 
         :return: 返回处理后的证件照和一系列参数
         """
@@ -103,16 +103,13 @@ class IDCreator:
             face_alignment=face_alignment,
         )
 
-
         # 总的开始时间
         total_start_time = time.time()
-        
+
         self.ctx = Context(params)
         ctx = self.ctx
         ctx.processing_image = image
-        ctx.processing_image = U.resize_image_esp(
-            ctx.processing_image, 2000
-        )  # 将输入图片 resize 到最大边长为 2000
+        ctx.processing_image = u.resize_image_esp(ctx.processing_image, 2000)  # 将输入图片 resize 到最大边长为 2000
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
 
@@ -130,7 +127,6 @@ class IDCreator:
         else:
             ctx.matting_image = ctx.processing_image
 
-
         # 2. ------------------美颜------------------
         print("[2]  Start Beauty...")
         start_beauty_time = time.time()
@@ -140,14 +136,7 @@ class IDCreator:
 
         # 如果仅换底，则直接返回抠图结果
         if ctx.params.change_bg_only:
-            ctx.result = Result(
-                standard=ctx.matting_image,
-                hd=ctx.matting_image,
-                matting=ctx.matting_image,
-                clothing_params=None,
-                typography_params=None,
-                face=None,
-            )
+            ctx.result = Result(standard=ctx.matting_image, hd=ctx.matting_image, matting=ctx.matting_image, clothing_params=None, typography_params=None, face=None)
             self.after_all and self.after_all(ctx)
             return ctx.result
 
@@ -167,11 +156,7 @@ class IDCreator:
 
             # 根据角度旋转原图和抠图
             b, g, r, a = cv2.split(ctx.matting_image)
-            ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
-                cv2.merge((b, g, r)),
-                a,
-                -1 * ctx.face["roll_angle"],
-            )
+            ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(cv2.merge((b, g, r)), a, -1 * ctx.face["roll_angle"])
 
             # 旋转后再执行一遍人脸检测
             self.detection_handler(ctx)
@@ -182,21 +167,12 @@ class IDCreator:
         # 4. ------------------图像调整------------------
         print("[4]  Start Image Post-Adjustment...")
         start_adjust_time = time.time()
-        result_image_hd, result_image_standard, clothing_params, typography_params = (
-            adjust_photo(ctx)
-        )
+        result_image_hd, result_image_standard, clothing_params, typography_params = (adjust_photo(ctx))
         end_adjust_time = time.time()
         print(f"[4]  Image Post-Adjustment Time: {end_adjust_time - start_adjust_time:.3f}s")
 
         # 5. ------------------返回结果------------------
-        ctx.result = Result(
-            standard=result_image_standard,
-            hd=result_image_hd,
-            matting=ctx.matting_image,
-            clothing_params=clothing_params,
-            typography_params=typography_params,
-            face=ctx.face,
-        )
+        ctx.result = Result(standard=result_image_standard, hd=result_image_hd, matting=ctx.matting_image, clothing_params=clothing_params, typography_params=typography_params, face=ctx.face)
         self.after_all and self.after_all(ctx)
 
         # 总的结束时间
