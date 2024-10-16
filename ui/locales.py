@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ui.utils import csv_to_size_list
-from ui.config import load_configuration
 import os
+
+from config import load_configuration
+from utils import csv_to_size_list
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 size_list_dict_CN = csv_to_size_list(os.path.join(base_dir, "assets/size_list_CN.csv"))

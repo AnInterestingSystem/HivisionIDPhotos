@@ -5,14 +5,14 @@ import cv2
 import gradio as gr
 import numpy as np
 
-from ui.locales import LOCALES
-from ui.utils import range_check
 from hivision import IDCreator
 from hivision.creator.choose_handler import choose_handler
 from hivision.creator.layout_calculator import (generate_layout_array, generate_layout_image, )
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
 from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
+from locales import LOCALES
+from utils import range_check
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 

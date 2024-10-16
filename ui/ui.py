@@ -4,8 +4,8 @@ import pathlib
 import gradio as gr
 from gradio import Blocks
 
-from ui.locales import LOCALES
-from ui.processor import IDPhotoProcessor
+from locales import LOCALES
+from processor import IDPhotoProcessor
 
 """
 只裁切模式:
