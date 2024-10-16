@@ -43,7 +43,7 @@ def create_ui(
     # if DEFAULT_FACE_DETECT_MODEL not in face_detect_models:
     #     DEFAULT_FACE_DETECT_MODEL = "mtcnn"
 
-    demo = gr.Blocks(title="HivisionIDPhotos")
+    demo = gr.Blocks(title="HivisionIDPhotos", theme='Medguy/randomtheme')
 
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "demo/assets/title.md")))
@@ -385,7 +385,7 @@ def create_ui(
                 )
                 # 模版照片
                 with gr.Accordion(
-                    LOCALES["template_photo"][DEFAULT_LANG]["label"], open=False
+                    LOCALES["template_photo"][DEFAULT_LANG]["label"], open=True
                 ) as template_image_accordion:      
                     img_output_template = gr.Gallery(
                         label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
@@ -394,7 +394,7 @@ def create_ui(
                     )
                 # 抠图图像
                 with gr.Accordion(
-                    LOCALES["matting_image"][DEFAULT_LANG]["label"], open=False
+                    LOCALES["matting_image"][DEFAULT_LANG]["label"], open=True
                 ) as matting_image_accordion:
                     with gr.Row():
                         img_output_standard_png = gr.Image(
