@@ -33,12 +33,12 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         gr.HTML(load_description(os.path.join(root_dir, "ui/assets/title.md")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
-            with gr.Column():
+            with gr.Column(elem_classes=["left-container"]):
                 img_input = gr.Image(height=400)
 
                 with gr.Row():
                     # 语言选择器
-                    language_options = gr.Dropdown(choices=language, label="Language", value=default_lang)
+                    language_options = gr.Dropdown(choices=language, label="语种", value=default_lang)
 
                 # TAB1 - 关键参数 ------------------------------------------------
                 with gr.Tab(LOCALES["key_param"][default_lang]["label"]) as key_parameter_tab:
@@ -152,17 +152,17 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                 gr.Examples(inputs=[img_input], examples=[[path.as_posix()] for path in sorted(pathlib.Path(os.path.join(root_dir, "ui/images")).rglob("*.jpg"))])
 
             # ---------------- 右半边 UI ----------------
-            with gr.Column():
+            with gr.Column(elem_classes=["right-container"]):
                 notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], visible=False)
-                with gr.Row():
+                with gr.Row(elem_classes=["right-row-container"]):
                     # 标准照
                     img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png")
                     # 高清照
                     img_output_standard_hd = gr.Image(label=LOCALES["hd_photo"][default_lang]["label"], height=350, format="png")
                 # 排版照
-                img_output_layout = gr.Image(label=LOCALES["layout_photo"][default_lang]["label"], height=350, format="png")
+                img_output_layout = gr.Image(label=LOCALES["layout_photo"][default_lang]["label"], height=350, format="png", elem_classes=["right-row-container"])
                 # 模版照片
-                with gr.Accordion(LOCALES["template_photo"][default_lang]["label"], open=True) as template_image_accordion:
+                with gr.Accordion(LOCALES["template_photo"][default_lang]["label"], open=True, elem_classes=["label-wrap"]) as template_image_accordion:
                     img_output_template = gr.Gallery(label=LOCALES["template_photo"][default_lang]["label"], height=350, format="png")
                 # 抠图图像
                 with gr.Accordion(LOCALES["matting_image"][default_lang]["label"], open=True) as matting_image_accordion:
