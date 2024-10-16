@@ -28,7 +28,7 @@ def create_ui(processor: IDPhotoProcessor, root_dir: str, language: list):
     else:
         default_lang = language[0]
 
-    demo = gr.Blocks(title="1", css="footer {visibility: hidden}")
+    demo = gr.Blocks(title="HivisionIDPhotos", css="footer {visibility: hidden}")
 
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "demo/assets/title.md")))
