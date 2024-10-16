@@ -1,12 +1,17 @@
 import argparse
 import os
 
+import gradio as gr
+
 from demo.processor import IDPhotoProcessor
 from demo.ui import create_ui
 
-root_dir = os.path.dirname(os.path.abspath(__file__))
-
 LANGUAGE = ["zh", "en", "ko", "ja"]
+
+root_dir = os.path.dirname(os.path.abspath(__file__))
+demo = gr.Blocks(title="HivisionIDPhotos", css_paths=[os.path.join(root_dir, "demo/assets/styles.css")], theme="Medguy/randomtheme")
+processor = IDPhotoProcessor()
+create_ui(demo, processor, root_dir, LANGUAGE)
 
 if __name__ == "__main__":
     argument_parser = argparse.ArgumentParser()
@@ -14,10 +19,6 @@ if __name__ == "__main__":
     argument_parser.add_argument("--host", type=str, default="0.0.0.0", help="The host of the server")
     argument_parser.add_argument("--root_path", type=str, default=None, help="The root path of the server, default is None (='/'), e.g. '/myapp'")
     args = argument_parser.parse_args()
-
-    processor = IDPhotoProcessor()
-
-    demo = create_ui(processor, root_dir, LANGUAGE)
 
     # 如果RUN_MODE是Beast，打印已开启野兽模式
     if os.getenv("RUN_MODE") == "beast":
