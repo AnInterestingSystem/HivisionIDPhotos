@@ -3,14 +3,14 @@ import os
 
 import gradio as gr
 
-from ui .processor import IDPhotoProcessor
+from ui.processor import IDPhotoProcessor
 from ui.theme import theme
 from ui.ui import create_ui
 
 LANGUAGE = ["zh", "en", "ko", "ja"]
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
-demo = gr.Blocks(title="HivisionIDPhotos", css_paths=[os.path.join(root_dir, "ui/assets/styles.css")], theme=theme)
+demo = gr.Blocks(title="HivisionIDPhotos", css_paths=[os.path.join(root_dir, "ui/assets/styles.css")], theme=theme, delete_cache=(86400, 86400))
 processor = IDPhotoProcessor()
 create_ui(demo, processor, root_dir, LANGUAGE)
 
@@ -25,4 +25,4 @@ if __name__ == "__main__":
     if os.getenv("RUN_MODE") == "beast":
         print("[Beast mode activated.] 已开启野兽模式。")
 
-    demo.launch(server_name=args.host, server_port=args.port, root_path=args.root_path, show_api=False)
+    demo.launch(server_name=args.host, server_port=args.port, root_path=args.root_path, show_api=False, max_file_size="10mb")

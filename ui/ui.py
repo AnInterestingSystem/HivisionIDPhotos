@@ -381,5 +381,3 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                     notification,
                 ],
             )
-
-    return demo
