@@ -3,13 +3,13 @@ import os
 
 import gradio as gr
 
-from demo.processor import IDPhotoProcessor
-from demo.ui import create_ui
+from ui.processor import IDPhotoProcessor
+from ui.ui import create_ui
 
 LANGUAGE = ["zh", "en", "ko", "ja"]
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
-demo = gr.Blocks(title="HivisionIDPhotos", css_paths=[os.path.join(root_dir, "demo/assets/styles.css")], theme="Medguy/randomtheme")
+demo = gr.Blocks(title="HivisionIDPhotos", css_paths=[os.path.join(root_dir, "ui/assets/styles.css")], theme="Medguy/randomtheme")
 processor = IDPhotoProcessor()
 create_ui(demo, processor, root_dir, LANGUAGE)
 

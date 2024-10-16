@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from demo.utils import csv_to_size_list
-from demo.config import load_configuration
+from ui.utils import csv_to_size_list
+from ui.config import load_configuration
 import os
 
 base_dir = os.path.dirname(os.path.abspath(__file__))

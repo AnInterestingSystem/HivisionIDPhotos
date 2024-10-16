@@ -5,8 +5,8 @@ import cv2
 import gradio as gr
 import numpy as np
 
-from demo.locales import LOCALES
-from demo.utils import range_check
+from ui.locales import LOCALES
+from ui.utils import range_check
 from hivision import IDCreator
 from hivision.creator.choose_handler import choose_handler
 from hivision.creator.layout_calculator import (generate_layout_array, generate_layout_image, )

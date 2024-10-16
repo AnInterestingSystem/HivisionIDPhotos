@@ -4,8 +4,8 @@ import pathlib
 import gradio as gr
 from gradio import Blocks
 
-from demo.locales import LOCALES
-from demo.processor import IDPhotoProcessor
+from ui.locales import LOCALES
+from ui.processor import IDPhotoProcessor
 
 """
 只裁切模式:
@@ -30,7 +30,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         default_lang = language[0]
 
     with demo:
-        gr.HTML(load_description(os.path.join(root_dir, "demo/assets/title.md")))
+        gr.HTML(load_description(os.path.join(root_dir, "ui/assets/title.md")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
             with gr.Column():
@@ -149,7 +149,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
 
                 img_but = gr.Button(LOCALES["button"][default_lang]["label"], elem_id="btn", variant="primary")
 
-                gr.Examples(inputs=[img_input], examples=[[path.as_posix()] for path in sorted(pathlib.Path(os.path.join(root_dir, "demo/images")).rglob("*.jpg"))])
+                gr.Examples(inputs=[img_input], examples=[[path.as_posix()] for path in sorted(pathlib.Path(os.path.join(root_dir, "ui/images")).rglob("*.jpg"))])
 
             # ---------------- 右半边 UI ----------------
             with gr.Column():

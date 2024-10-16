@@ -1,5 +1,5 @@
 import os
-from demo.utils import csv_to_size_list, csv_to_color_list
+from ui.utils import csv_to_size_list, csv_to_color_list
 
 
 def load_configuration(root_dir):
