@@ -7,16 +7,18 @@ r"""
 @Description:
     创建证件照
 """
-import numpy as np
-from typing import Tuple
-import hivision.creator.utils as U
-from .context import Context, ContextHandler, Params, Result
-from .human_matting import extract_human
-from .face_detector import detect_face_mtcnn
-from hivision.plugin.beauty.handler import beauty_face
-from .photo_adjuster import adjust_photo
-import cv2
 import time
+from typing import Tuple
+
+import cv2
+import numpy as np
+
+import hivision.creator.utils as U
+from hivision.plugin.beauty.handler import beauty_face
+from .context import Context, ContextHandler, Params, Result
+from .face_detector import detect_face_mtcnn
+from .human_matting import extract_human
+from .photo_adjuster import adjust_photo
 
 
 class IDCreator:
@@ -57,7 +59,7 @@ class IDCreator:
         crop_only: bool = False,
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
-        head_top_range: float = (0.12, 0.1),
+        head_top_range: tuple[float, float] = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
         brightness_strength: int = 0,
