@@ -493,6 +493,20 @@ LOCALES = {
             "choices": ["추가하지 않음", "추가"],
         },
     },
+    "examples": {
+        "en": {
+            "label": "Examples",
+        },
+        "zh": {
+            "label": "样例",
+        },
+        "ja": {
+            "label": "見本",
+        },
+        "ko": {
+            "label": "견본",
+        },
+    },
     # 输出结果
     "notification": {
         "en": {
