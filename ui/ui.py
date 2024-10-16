@@ -34,11 +34,12 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
             with gr.Column(elem_classes=["left-container"]):
-                img_input = gr.Image(height=400)
 
                 with gr.Row():
                     # 语言选择器
-                    language_options = gr.Dropdown(choices=language, label="语种", value=default_lang)
+                    language_options = gr.Dropdown(choices=language, label=LOCALES["language_type"][default_lang]["label"], value=default_lang)
+
+                img_input = gr.Image(label=LOCALES["input_photo"][default_lang]["label"], height=400)
 
                 # TAB1 - 关键参数 ------------------------------------------------
                 with gr.Tab(LOCALES["key_param"][default_lang]["label"]) as key_parameter_tab:
@@ -173,6 +174,8 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
             # ---------------- 多语言切换函数 ----------------
             def change_language(language):
                 return {
+                    language_options: gr.update(label=LOCALES["language_type"][language]["label"]),
+                    img_input: gr.update(label=LOCALES["input_photo"][language]["label"]),
                     size_list_options: gr.update(label=LOCALES["size_list"][language]["label"], choices=LOCALES["size_list"][language]["choices"], value=LOCALES["size_list"][language]["choices"][0]),
                     mode_options: gr.update(label=LOCALES["size_mode"][language]["label"], choices=LOCALES["size_mode"][language]["choices"], value=LOCALES["size_mode"][language]["choices"][0]),
                     color_options: gr.update(label=LOCALES["bg_color"][language]["label"], choices=LOCALES["bg_color"][language]["choices"], value=LOCALES["bg_color"][language]["choices"][0]),
@@ -276,6 +279,8 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                     language_options
                 ],
                 outputs=[
+                    language_options,
+                    img_input,
                     size_list_options,
                     mode_options,
                     color_options,
