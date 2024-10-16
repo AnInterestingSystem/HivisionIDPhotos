@@ -512,19 +512,27 @@ LOCALES = {
     "notification": {
         "en": {
             "label": "notification",
-            "face_error": "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.",
+            "access_error": "Please visit through https://app.iknow.plus.",
+            "no_image_error": "Please upload an image first.",
+            "face_error": "The number of faces is not equal to 1. Please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left.",
         },
         "zh": {
             "label": "通知",
-            "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型或提出Github Issue通知作者。",
+            "access_error": "请通过 https://app.iknow.plus 访问。",
+            "no_image_error": "请先上传照片。",
+            "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型。",
         },
         "ja": {
             "label": "通知",
-            "face_error": "顔の数が1ではありません。1つの顔を含む画像をアップロードしてください。実際の顔の数が1の場合、検出モデルの精度の問題かもしれません。左側で別の顔検出モデルに切り替えるか、Githubの問題を作成して作者に通知してください。",
+            "access_error": "https://app.iknow.plus からアクセスしてください。",
+            "no_image_error": "まず画像をアップロードしてください。",
+            "face_error": "顔の数が1ではありません。1つの顔を含む画像をアップロードしてください。実際の顔の数が1の場合、検出モデルの精度の問題かもしれません。左側で別の顔検出モデルに切り替えるか。",
         },
         "ko": {
             "label": "알림",
-            "face_error": "얼굴 수가 1이 아닙니다. 단일 얼굴이 있는 이미지를 업로드해 주세요. 실제 얼굴 수가 1인 경우 감지 모델의 정확도 문제일 수 있습니다. 왼쪽에서 다른 얼굴 감지 모델로 전환하거나 Github Issue를 제기하여 작성자에게 알려주세요.",
+            "access_error": "https://app.iknow.plus 를 통해 방문해주세요.",
+            "no_image_error": "먼저 이미지를 업로드해 주세요.",
+            "face_error": "얼굴 수가 1이 아닙니다. 단일 얼굴이 있는 이미지를 업로드해 주세요. 실제 얼굴 수가 1인 경우 감지 모델의 정확도 문제일 수 있습니다. 왼쪽에서 다른 얼굴 감지 모델로.",
         },
     },
     "standard_photo": {

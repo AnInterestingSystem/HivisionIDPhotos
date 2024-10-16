@@ -11,6 +11,7 @@ from hivision.creator.layout_calculator import (generate_layout_array, generate_
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
 from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
+from .auth import check_auth
 from .locales import LOCALES
 from .utils import range_check
 
@@ -19,41 +20,48 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 
 class IDPhotoProcessor:
     def process(
-            self,
-            input_image,
-            mode_option,
-            size_list_option,
-            color_option,
-            render_option,
-            image_kb_options,
-            custom_color_r,
-            custom_color_g,
-            custom_color_b,
-            custom_color_hex_value,
-            custom_size_height,
-            custom_size_width,
-            custom_size_height_mm,
-            custom_size_width_mm,
-            custom_image_kb,
-            language,
-            watermark_option,
-            watermark_text,
-            watermark_text_color,
-            watermark_text_size,
-            watermark_text_opacity,
-            watermark_text_angle,
-            watermark_text_space,
-            head_measure_ratio=0.2,
-            top_distance_max=0.12,
-            whitening_strength=0,
-            image_dpi_option=False,
-            custom_image_dpi=None,
-            brightness_strength=0,
-            contrast_strength=0,
-            sharpen_strength=0,
-            saturation_strength=0,
-            plugin_option=[],
+        self,
+        request: gr.Request,
+        input_image,
+        mode_option,
+        size_list_option,
+        color_option,
+        render_option,
+        image_kb_options,
+        custom_color_r,
+        custom_color_g,
+        custom_color_b,
+        custom_color_hex_value,
+        custom_size_height,
+        custom_size_width,
+        custom_size_height_mm,
+        custom_size_width_mm,
+        custom_image_kb,
+        language,
+        watermark_option,
+        watermark_text,
+        watermark_text_color,
+        watermark_text_size,
+        watermark_text_opacity,
+        watermark_text_angle,
+        watermark_text_space,
+        head_measure_ratio=0.2,
+        top_distance_max=0.12,
+        whitening_strength=0,
+        image_dpi_option=False,
+        custom_image_dpi=None,
+        brightness_strength=0,
+        contrast_strength=0,
+        sharpen_strength=0,
+        saturation_strength=0,
+        plugin_option=[],
     ):
+        if not check_auth(request):
+            return self._handle_photo_generation_error(language, "access_error")
+
+        if input_image is None:
+            return self._handle_photo_generation_error(language, "no_image_error")
+
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
         # 得到render_option在LOCALES["render_mode"][language]["choices"]中的索引
@@ -120,7 +128,7 @@ class IDPhotoProcessor:
                 face_alignment_option,
             )
         except (FaceError, APIError):
-            return self._handle_photo_generation_error(language)
+            return self._handle_photo_generation_error(language, "face_error")
 
         # 后处理生成的照片
         return self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
@@ -193,19 +201,19 @@ class IDPhotoProcessor:
     # 生成证件照
     @staticmethod
     def _generate_id_photo(
-            creator: IDCreator,
-            input_image,
-            idphoto_json,
-            language,
-            head_measure_ratio,
-            top_distance_max,
-            top_distance_min,
-            whitening_strength,
-            brightness_strength,
-            contrast_strength,
-            sharpen_strength,
-            saturation_strength,
-            face_alignment_option,
+        creator: IDCreator,
+        input_image,
+        idphoto_json,
+        language,
+        head_measure_ratio,
+        top_distance_max,
+        top_distance_min,
+        whitening_strength,
+        brightness_strength,
+        contrast_strength,
+        sharpen_strength,
+        saturation_strength,
+        face_alignment_option,
     ):
         """生成证件照"""
         change_bg_only = (idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1])
@@ -225,9 +233,9 @@ class IDPhotoProcessor:
 
     # 处理照片生成错误
     @staticmethod
-    def _handle_photo_generation_error(language):
+    def _handle_photo_generation_error(language, error_type):
         """处理照片生成错误"""
-        return [gr.update(value=None) for _ in range(4)] + [gr.update(visible=False), gr.update(value=LOCALES["notification"][language]["face_error"], visible=True), None]
+        return [gr.update(value=None) for _ in range(6)] + [gr.update(visible=False), gr.update(value=LOCALES["notification"][language][error_type], visible=True)]
 
     # 处理生成的照片
     def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color):
