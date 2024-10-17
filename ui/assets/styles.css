@@ -19,9 +19,18 @@ footer {
 }
 
 .right-container {
-  border: #CEE9F2 solid 4px;
+  border: #CEE9F2 solid 8px;
 }
 
 .right-row-container {
   border-bottom: #CEE9F2 solid 1px;
+}
+
+.notification {
+  background-color: #fff1f0;
+  --body-text-color: #f5222d;
+  --input-background-fill: null;
+  --input-border-width: null;
+  --input-radius: null;
+  --input-shadow: null;
 }

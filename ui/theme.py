@@ -21,7 +21,7 @@ theme.set(
     block_label_background_fill="#f0fbfe",
 
     # checkbox
-    checkbox_label_background_fill_selected="#f0fbfe",
+    checkbox_label_background_fill_selected="#CEE9F2",
     checkbox_label_text_color_selected="#374151",
     checkbox_background_color_selected="#CEE9F2",
     checkbox_border_color_selected="#ADD8E6",
@@ -32,5 +32,5 @@ theme.set(
 
     #input
     input_border_color_focus="#f0fbfe",
-    input_background_fill_focus="#81c8e0",
+    input_background_fill_focus="#f0fbfe",
 )

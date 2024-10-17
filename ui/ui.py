@@ -116,7 +116,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                             placeholder=LOCALES["watermark_text"][default_lang]["placeholder"],
                             interactive=False,
                         )
-                        watermark_text_color = gr.ColorPicker(label=LOCALES["watermark_color"][default_lang]["label"], interactive=False, value="#FFFFFF")
+                        watermark_text_color = gr.ColorPicker(label=LOCALES["watermark_color"][default_lang]["label"], interactive=False, value="#ADD8E6")
 
                     watermark_text_size = gr.Slider(minimum=10, maximum=100, value=20, label=LOCALES["watermark_size"][default_lang]["label"], interactive=False, step=1)
 

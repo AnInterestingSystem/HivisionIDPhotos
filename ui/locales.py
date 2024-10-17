@@ -383,22 +383,22 @@ LOCALES = {
     "watermark_text": {
         "en": {
             "label": "Text",
-            "value": "Hello",
+            "value": "iKnow",
             "placeholder": "up to 20 characters",
         },
         "zh": {
             "label": "水印文字",
-            "value": "Hello",
+            "value": "iKnow",
             "placeholder": "最多20个字符",
         },
         "ja": {
             "label": "テキスト",
-            "value": "Hello",
+            "value": "iKnow",
             "placeholder": "最大20文字",
         },
         "ko": {
             "label": "텍스트",
-            "value": "Hello",
+            "value": "iKnow",
             "placeholder": "최대 20자",
         },
     },
@@ -518,7 +518,7 @@ LOCALES = {
         },
         "zh": {
             "label": "通知",
-            "access_error": "请通过 https://app.iknow.plus 访问。",
+            "access_error": "请访问 https://app.iknow.plus 登陆后使用该功能。",
             "no_image_error": "请先上传照片。",
             "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型。",
         },
