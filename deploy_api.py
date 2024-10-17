@@ -193,11 +193,11 @@ async def generate_layout_photos(
 async def watermark(
         input_image: UploadFile = File(None),
         input_image_base64: str = Form(None),
-        text: str = Form("Hello"),
+        text: str = Form("iKnow"),
         size: int = 20,
         opacity: float = 0.5,
         angle: int = 30,
-        color: str = "#000000",
+        color: str = "#ADD8E6",
         space: int = 25,
         kb: int = Form(None),
         dpi: int = Form(300),
