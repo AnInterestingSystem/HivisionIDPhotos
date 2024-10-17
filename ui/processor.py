@@ -12,7 +12,7 @@ from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
 from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
 from .locales import LOCALES
-from .request import create_task
+from .request import create_task, save_failed_task, save_task_result
 from .utils import range_check
 
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -129,10 +129,16 @@ class IDPhotoProcessor:
                 face_alignment_option,
             )
         except (FaceError, APIError):
+            save_failed_task(request, task_id)
+
             return self._handle_photo_generation_error(language, "face_error")
 
         # 后处理生成的照片
-        return self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
+        response = self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
+
+        save_task_result(request, task_id, response[0], response[1], response[2], response[3], response[4]["value"], response[5]["value"])
+
+        return response
 
     # 初始化idphoto_json字典
     @staticmethod

@@ -50,5 +50,85 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
     return status_response["payload"]
 
 
-# def save_task_result(request: gr.Request, img_output_standard: str, img_output_standard_hd: str, img_output_standard_png: ndarray, img_output_standard_hd_png: ndarray, img_output_layout: str, img_output_template: ndarray) -> None:
+def save_failed_task(request: gr.Request, task_id: int) -> None:
+    user_agent = request.request.headers.get("user-agent")
+    is_mini_program = False
+    if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
+        is_mini_program = True
 
+    headers = {}
+    token = request.request.query_params.get("token")
+    if token is not None:
+        headers["Authorization"] = f"Bearer {token}"
+    elif not is_mini_program:
+        return
+
+    params = {
+        "id": task_id,
+        "status": "FAILED",
+        "isMiniProgram": is_mini_program
+    }
+    response = requests.post(f"{chatbot_backend_base_url}/photoEdit/saveTask", headers=headers, params=params)
+    if response.status_code != 200:
+        logging.error(f"Failed to save task. Response status code: {response.status_code}")
+        return
+
+    status_response = response.json()
+    if status_response.get("status") != "SUCCESS":
+        logging.error(f"Failed to save task. Reason: {status_response.get('reason')}")
+        return
+
+
+def save_task_result(request: gr.Request, task_id: int, img_output_standard: str, img_output_standard_hd: str, img_output_standard_png: ndarray, img_output_standard_hd_png: ndarray, img_output_layout: str, img_output_templates: list[ndarray]) -> None:
+    user_agent = request.request.headers.get("user-agent")
+    is_mini_program = False
+    if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
+        is_mini_program = True
+
+    headers = {}
+    token = request.request.query_params.get("token")
+    if token is not None:
+        headers["Authorization"] = f"Bearer {token}"
+    elif not is_mini_program:
+        return
+
+    params = {
+        "id": task_id,
+        "status": "SUCCEEDED",
+        "isMiniProgram": is_mini_program
+    }
+    with open(img_output_standard, "rb") as standard_file, open(img_output_standard_hd, "rb") as hd_file, open(img_output_layout, "rb") as layout_file:
+        matting_standard_pil_image = Image.fromarray(img_output_standard_png)
+        matting_standard_image_bytes_io = io.BytesIO()
+        matting_standard_pil_image.save(matting_standard_image_bytes_io, format="PNG")
+        matting_standard_image_bytes = matting_standard_image_bytes_io.getvalue()
+
+        matting_hd_pil_image = Image.fromarray(img_output_standard_hd_png)
+        matting_hd_image_bytes_io = io.BytesIO()
+        matting_hd_pil_image.save(matting_hd_image_bytes_io, format="PNG")
+        matting_hd_image_bytes = matting_hd_image_bytes_io.getvalue()
+
+        files = {
+            "standard-file": ("standard-file.png", standard_file, "image/png"),
+            "hd-file": ("hd-file.png", hd_file, "image/png"),
+            "layout-file": ("layout-file.png", layout_file, "image/png"),
+            "matting-standard-file": ("matting-standard-file.png", matting_standard_image_bytes, "image/png"),
+            "matting-hd-file": ("matting-hd-file.png", matting_hd_image_bytes, "image/png"),
+        }
+
+        for i in range(len(img_output_templates)):
+            template_pil_image = Image.fromarray(img_output_templates[0])
+            template_image_bytes_io = io.BytesIO()
+            template_pil_image.save(template_image_bytes_io, format="PNG")
+            template_image_bytes = template_image_bytes_io.getvalue()
+            files[f"template-file-{i}"] = (f"template-file-{i}.png", template_image_bytes, "image/png")
+
+        response = requests.post(f"{chatbot_backend_base_url}/photoEdit/saveTask", headers=headers, params=params, files=files)
+        if response.status_code != 200:
+            logging.error(f"Failed to save task. Response status code: {response.status_code}")
+            return
+
+        status_response = response.json()
+        if status_response.get("status") != "SUCCESS":
+            logging.error(f"Failed to save task. Reason: {status_response.get('reason')}")
+            return
