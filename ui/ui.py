@@ -116,7 +116,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                             placeholder=LOCALES["watermark_text"][default_lang]["placeholder"],
                             interactive=False,
                         )
-                        watermark_text_color = gr.ColorPicker(label=LOCALES["watermark_color"][default_lang]["label"], interactive=False, value="#FFFFFF")
+                        watermark_text_color = gr.ColorPicker(label=LOCALES["watermark_color"][default_lang]["label"], interactive=False, value="#ADD8E6")
 
                     watermark_text_size = gr.Slider(minimum=10, maximum=100, value=20, label=LOCALES["watermark_size"][default_lang]["label"], interactive=False, step=1)
 
@@ -373,12 +373,12 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                     plugin_options,
                 ],
                 outputs=[
-                    img_output_standard,
-                    img_output_standard_hd,
-                    img_output_standard_png,
-                    img_output_standard_hd_png,
-                    img_output_layout,
-                    img_output_template,
+                    img_output_standard,# 标准照
+                    img_output_standard_hd,# 高清照
+                    img_output_standard_png,# 抠图图像
+                    img_output_standard_hd_png,# 抠图图像
+                    img_output_layout,# 排版照
+                    img_output_template,# 模版照片
                     template_image_accordion,
                     notification,
                 ],

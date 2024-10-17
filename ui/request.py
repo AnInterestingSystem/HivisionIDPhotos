@@ -31,7 +31,7 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
     image_bytes = image_bytes_io.getvalue()
 
     params = {
-        "taskType": "ID",
+        "type": "ID",
         "isMiniProgram": is_mini_program
     }
     files = {
@@ -49,5 +49,6 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
 
     return status_response["payload"]
 
-# def save_task_result(request: gr.Request) -> None:
-#
+
+# def save_task_result(request: gr.Request, img_output_standard: str, img_output_standard_hd: str, img_output_standard_png: ndarray, img_output_standard_hd_png: ndarray, img_output_layout: str, img_output_template: ndarray) -> None:
+

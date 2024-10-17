@@ -236,7 +236,7 @@ class IDPhotoProcessor:
     @staticmethod
     def _handle_photo_generation_error(language, error_type):
         """处理照片生成错误"""
-        return [gr.update(value=None) for _ in range(6)] + [gr.update(visible=False), gr.update(value=LOCALES["notification"][language][error_type], visible=True)]
+        return [gr.update(value=None) for _ in range(6)] + [gr.update(visible=False), gr.update(value=LOCALES["notification"][language][error_type], visible=True, elem_classes=["notification"])]
 
     # 处理生成的照片
     def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color):
