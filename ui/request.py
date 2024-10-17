@@ -31,12 +31,13 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
     image_bytes = image_bytes_io.getvalue()
 
     params = {
+        "taskType": "ID",
         "isMiniProgram": is_mini_program
     }
     files = {
         "inputImage": ("input-image.png", image_bytes, "image/png")
     }
-    response = requests.post(f"{chatbot_backend_base_url}/idPhoto/createTask", headers=headers, params=params, files=files)
+    response = requests.post(f"{chatbot_backend_base_url}/photoEdit/createTask", headers=headers, params=params, files=files)
     if response.status_code != 200:
         logging.error(f"Failed to create task. Response status code: {response.status_code}")
         return None
