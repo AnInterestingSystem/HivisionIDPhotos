@@ -13,10 +13,7 @@ from .processor import IDPhotoProcessor
 """
 
 
-def load_description(fp):
-    """
-    加载title.md文件作为Demo的顶部栏
-    """
+def load_header(fp):
     with open(fp, "r", encoding="utf-8") as f:
         content = f.read()
     return content
@@ -30,7 +27,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         default_lang = language[0]
 
     with demo:
-        gr.HTML(load_description(os.path.join(root_dir, "ui/assets/title.md")))
+        gr.HTML(load_header(os.path.join(root_dir, "ui/assets/header.html")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
             with gr.Column(elem_classes=["left-container"]):

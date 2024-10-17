@@ -11,8 +11,8 @@ from hivision.creator.layout_calculator import (generate_layout_array, generate_
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
 from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
-from .auth import check_auth
 from .locales import LOCALES
+from .request import create_task
 from .utils import range_check
 
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -56,11 +56,12 @@ class IDPhotoProcessor:
         saturation_strength=0,
         plugin_option=[],
     ):
-        if not check_auth(request):
-            return self._handle_photo_generation_error(language, "access_error")
-
         if input_image is None:
             return self._handle_photo_generation_error(language, "no_image_error")
+
+        task_id = create_task(request, input_image)
+        if task_id is None:
+            return self._handle_photo_generation_error(language, "access_error")
 
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
