@@ -94,6 +94,8 @@ class IDPhotoProcessor:
         # 处理尺寸模式
         size_result = self._process_size_mode(idphoto_json, language, size_list_option, custom_size_height, custom_size_width, custom_size_height_mm, custom_size_width_mm)
         if isinstance(size_result, list):
+            save_failed_task(request, task_id)
+
             return size_result  # 返回错误信息
 
         # 处理颜色模式
@@ -136,7 +138,7 @@ class IDPhotoProcessor:
         # 后处理生成的照片
         response = self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
 
-        save_task_result(request, task_id, response[0], response[1], response[2], response[3], response[4]["value"], response[5]["value"])
+        save_task_result(request, task_id, jpeg_format_option, response[0], response[1], response[2], response[3], response[4]["value"], response[5]["value"])
 
         return response
 

@@ -79,7 +79,17 @@ def save_failed_task(request: gr.Request, task_id: int) -> None:
         return
 
 
-def save_task_result(request: gr.Request, task_id: int, img_output_standard: str, img_output_standard_hd: str, img_output_standard_png: ndarray, img_output_standard_hd_png: ndarray, img_output_layout: str, img_output_templates: list[ndarray]) -> None:
+def save_task_result(
+    request: gr.Request,
+    task_id: int,
+    jpeg_format_option: bool,
+    img_output_standard: str,
+    img_output_standard_hd: str,
+    img_output_standard_png: ndarray,
+    img_output_standard_hd_png: ndarray,
+    img_output_layout: str,
+    img_output_templates: list[ndarray],
+) -> None:
     user_agent = request.request.headers.get("user-agent")
     is_mini_program = False
     if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
@@ -110,10 +120,11 @@ def save_task_result(request: gr.Request, task_id: int, img_output_standard: str
         # matting_hd_pil_image.save(matting_hd_image_bytes_io, format="PNG")
         # matting_hd_image_bytes = matting_hd_image_bytes_io.getvalue()
 
+        extension_name = "jpeg" if jpeg_format_option else "png"
         files = {
-            "standard-file": ("standard-file.png", standard_file, "image/png"),
-            # "hd-file": ("hd-file.png", hd_file, "image/png"),
-            "layout-file": ("layout-file.png", layout_file, "image/png"),
+            "standard-file": (f"standard-file.{extension_name}", standard_file, f"image/{extension_name}"),
+            # "hd-file": (f"hd-file.{extension_name}", hd_file, f"image/{extension_name}"),
+            "layout-file": (f"layout-file.{extension_name}", layout_file, f"image/{extension_name}"),
             # "matting-standard-file": ("matting-standard-file.png", matting_standard_image_bytes, "image/png"),
             # "matting-hd-file": ("matting-hd-file.png", matting_hd_image_bytes, "image/png"),
         }
