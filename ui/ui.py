@@ -34,7 +34,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                 # 语言选择器
                 language_options = gr.Dropdown(choices=language, label=LOCALES["language_type"][default_lang]["label"], value=default_lang)
 
-                img_input = gr.Image(label=LOCALES["input_photo"][default_lang]["label"], height=400, image_mode="RGB")
+                img_input = gr.Image(label=LOCALES["input_photo"][default_lang]["label"], height=400)
 
                 # TAB1 - 关键参数 ------------------------------------------------
                 with gr.Tab(LOCALES["key_param"][default_lang]["label"]) as key_parameter_tab:
