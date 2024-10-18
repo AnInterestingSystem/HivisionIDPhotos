@@ -19,4 +19,6 @@ COPY app.py .
 
 EXPOSE 8080
 
+SET ENV=prod
+
 CMD ["python", "app.py", "--port", "8080"]
