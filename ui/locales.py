@@ -518,7 +518,7 @@ LOCALES = {
         },
         "zh": {
             "label": "通知",
-            "access_error": "请访问 https://app.iknow.plus 登陆后使用该功能。",
+            "access_error": "请访问 https://app.iknow.plus 登录后使用该功能。",
             "no_image_error": "请先上传照片。",
             "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型。",
         },
