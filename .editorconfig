@@ -16,3 +16,7 @@ tab_width = 2
 [*.bash]
 indent_size = 2
 tab_width = 2
+
+[*.html]
+indent_size = 2
+tab_width = 2

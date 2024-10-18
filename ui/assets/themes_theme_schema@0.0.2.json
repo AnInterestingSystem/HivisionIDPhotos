@@ -8,16 +8,6 @@
             },
             {
                 "__gradio_font__": true,
-                "name": "ui-sans-serif",
-                "class": "google"
-            },
-            {
-                "__gradio_font__": true,
-                "name": "system-ui",
-                "class": "font"
-            },
-            {
-                "__gradio_font__": true,
                 "name": "sans-serif",
                 "class": "font"
             }
@@ -43,10 +33,6 @@
                 "name": "monospace",
                 "class": "font"
             }
-        ],
-        "_stylesheets": [
-            "https://fonts.googleapis.com/css2?family=ui-sans-serif:wght@400;600&display=swap",
-            "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap"
         ],
         "background_fill_primary": "*neutral_50",
         "background_fill_primary_dark": "*neutral_950",
@@ -216,7 +202,7 @@
         "error_icon_color_dark": "#ef4444",
         "error_text_color": "#b91c1c",
         "error_text_color_dark": "#fef2f2",
-        "font": "'Montserrat', 'ui-sans-serif', 'system-ui', sans-serif",
+        "font": "'Montserrat', sans-serif",
         "font_mono": "'IBM Plex Mono', 'ui-monospace', 'Consolas', monospace",
         "form_gap_width": "0px",
         "input_background_fill": "white",
