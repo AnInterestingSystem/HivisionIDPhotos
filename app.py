@@ -2,13 +2,10 @@ import argparse
 import os
 
 import gradio as gr
-from pillow_heif import register_heif_opener
 
 from ui.processor import IDPhotoProcessor
 from ui.theme import theme
 from ui.ui import create_ui
-
-register_heif_opener()
 
 LANGUAGE = ["zh", "en", "ko", "ja"]
 
