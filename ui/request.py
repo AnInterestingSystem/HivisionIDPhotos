@@ -43,7 +43,7 @@ def create_task(request: gr.Request, input_image: ndarray) -> int:
         "isMiniProgram": is_mini_program
     }
     files = {
-        "inputImage": ("input-image.png", image_bytes, "image/png")
+        "inputImage": ("input-image.jpg", image_bytes, "image/jpeg")
     }
     response = requests.post(f"{chatbot_backend_base_url}/photoEdit/createTask", headers=headers, params=params, files=files)
     if response.status_code != 200:
