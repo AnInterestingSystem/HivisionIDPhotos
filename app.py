@@ -24,4 +24,4 @@ if __name__ == "__main__":
     if os.getenv("RUN_MODE") == "beast":
         print("[Beast mode activated.] 已开启野兽模式。")
 
-    demo.launch(server_name=args.host, server_port=args.port, show_api=False, max_file_size="10mb")
+    demo.launch(server_name=args.host, server_port=args.port, favicon_path=os.path.join(root_dir, "ui/assets/favicon.ico"), show_api=False, max_file_size="10mb")
