@@ -7,12 +7,14 @@ import requests
 from PIL import Image
 from numpy import ndarray
 
+INPUT_IMAGE_MAX_SIZE = 10_000_000
+
 chatbot_backend_base_url = "http://localhost:8080/api"
 if os.environ.get("ENV") == "prod":
     chatbot_backend_base_url = "https://app.iknow.plus/api"
 
 
-def create_task(request: gr.Request, input_image: ndarray) -> int | None:
+def create_task(request: gr.Request, input_image: ndarray) -> int:
     user_agent = request.request.headers.get("user-agent")
     is_mini_program = False
     if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
@@ -23,12 +25,18 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
     if token is not None:
         headers["Authorization"] = f"Bearer {token}"
     elif not is_mini_program:
-        return None
+        return -1
 
     pil_image = Image.fromarray(input_image)
     image_bytes_io = io.BytesIO()
-    pil_image.save(image_bytes_io, format="PNG")
-    image_bytes = image_bytes_io.getvalue()
+    image_bytes: bytes = b''
+    for quality in range(95, 5, -10):
+        pil_image.save(image_bytes_io, format="JPEG", optimize=True, quality=75)
+        image_bytes = image_bytes_io.getvalue()
+        if len(image_bytes) <= INPUT_IMAGE_MAX_SIZE:
+            break
+    if len(image_bytes) == 0 or len(image_bytes) >= INPUT_IMAGE_MAX_SIZE:
+        return -2
 
     params = {
         "type": "ID",
@@ -40,12 +48,12 @@ def create_task(request: gr.Request, input_image: ndarray) -> int | None:
     response = requests.post(f"{chatbot_backend_base_url}/photoEdit/createTask", headers=headers, params=params, files=files)
     if response.status_code != 200:
         logging.error(f"Failed to create task. Response status code: {response.status_code}")
-        return None
+        return -3
 
     status_response = response.json()
     if status_response.get("status") != "SUCCESS":
         logging.error(f"Failed to create task. Reason: {status_response.get('reason')}")
-        return None
+        return -3
 
     return status_response["payload"]
 

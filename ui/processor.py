@@ -60,8 +60,12 @@ class IDPhotoProcessor:
             return self._handle_photo_generation_error(language, "no_image_error")
 
         task_id = create_task(request, input_image)
-        if task_id is None:
+        if task_id == -1:
             return self._handle_photo_generation_error(language, "access_error")
+        elif task_id == -2:
+            return self._handle_photo_generation_error(language, "input_image_too_large_error")
+        elif task_id == -3:
+            return self._handle_photo_generation_error(language, "internal_error")
 
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
