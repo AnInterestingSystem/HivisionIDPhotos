@@ -27,7 +27,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         default_lang = language[0]
 
     with demo:
-        gr.HTML(load_header(os.path.join(root_dir, "ui/assets/header.html")))
+        # gr.HTML(load_header(os.path.join(root_dir, "ui/assets/header.html")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
             with gr.Column(elem_classes=["left-container"]):
