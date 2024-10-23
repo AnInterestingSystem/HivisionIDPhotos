@@ -6,7 +6,7 @@ mtcnn-runtime
 tqdm
 starlette
 
-gradio>=4.43.0
+gradio==5.1.0
 fastapi
 uvicorn
 
