@@ -15,16 +15,12 @@ if os.environ.get("ENV") == "prod":
 
 
 def create_task(request: gr.Request, input_image: ndarray) -> int:
-    user_agent = request.request.headers.get("user-agent")
-    is_mini_program = False
-    if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
-        is_mini_program = True
-
     headers = {}
+    is_mini_program = request.request.query_params.get("isMiniProgram")
     token = request.request.query_params.get("token")
     if token is not None:
         headers["Authorization"] = f"Bearer {token}"
-    elif not is_mini_program:
+    elif is_mini_program is None or is_mini_program != "True":
         return -1
 
     pil_image = Image.fromarray(input_image)
@@ -59,16 +55,12 @@ def create_task(request: gr.Request, input_image: ndarray) -> int:
 
 
 def save_failed_task(request: gr.Request, task_id: int) -> None:
-    user_agent = request.request.headers.get("user-agent")
-    is_mini_program = False
-    if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
-        is_mini_program = True
-
     headers = {}
+    is_mini_program = request.request.query_params.get("isMiniProgram")
     token = request.request.query_params.get("token")
     if token is not None:
         headers["Authorization"] = f"Bearer {token}"
-    elif not is_mini_program:
+    elif is_mini_program is None or is_mini_program != "True":
         return
 
     params = {
@@ -98,16 +90,12 @@ def save_task_result(
     img_output_layout: str,
     img_output_templates: list[ndarray],
 ) -> None:
-    user_agent = request.request.headers.get("user-agent")
-    is_mini_program = False
-    if "miniProgram" in user_agent or "MicroMessenger" in user_agent:
-        is_mini_program = True
-
     headers = {}
+    is_mini_program = request.request.query_params.get("isMiniProgram")
     token = request.request.query_params.get("token")
     if token is not None:
         headers["Authorization"] = f"Bearer {token}"
-    elif not is_mini_program:
+    elif is_mini_program is None or is_mini_program != "True":
         return
 
     params = {
