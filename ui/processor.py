@@ -10,7 +10,8 @@ from hivision.creator.choose_handler import choose_handler
 from hivision.creator.layout_calculator import (generate_layout_array, generate_layout_image, )
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
-from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
+from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark,
+                            save_image_dpi_to_bytes, )
 from .locales import LOCALES
 from .request import create_task, save_failed_task, save_task_result
 from .utils import range_check
@@ -248,7 +249,7 @@ class IDPhotoProcessor:
     @staticmethod
     def _handle_photo_generation_error(language, error_type):
         """处理照片生成错误"""
-        return [gr.update(value=None) for _ in range(6)] + [gr.update(visible=False), gr.update(value=LOCALES["notification"][language][error_type], visible=True, elem_classes=["notification"])]
+        return [gr.update(value=None) for _ in range(7)] + [gr.update(value=LOCALES["notification"][language][error_type], visible=True, elem_classes=["notification"])]
 
     # 处理生成的照片
     def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color):
@@ -285,6 +286,7 @@ class IDPhotoProcessor:
             gr.update(value=result_image_layout, visible=result_image_layout_visible),
             gr.update(value=result_image_template, visible=result_image_template_visible),
             gr.update(visible=result_image_template_visible),
+            language,
         )
 
     # 渲染背景
@@ -442,7 +444,7 @@ class IDPhotoProcessor:
             return output_paths
 
     @staticmethod
-    def _create_response(result_image_standard, result_image_hd, result_image_standard_png, result_image_hd_png, result_layout_image_gr, result_image_template_gr, result_image_template_accordion_gr):
+    def _create_response(result_image_standard, result_image_hd, result_image_standard_png, result_image_hd_png, result_layout_image_gr, result_image_template_gr, result_image_template_accordion_gr, language):
         """创建响应"""
         response = [
             result_image_standard,
@@ -452,7 +454,8 @@ class IDPhotoProcessor:
             result_layout_image_gr,
             result_image_template_gr,
             result_image_template_accordion_gr,
-            gr.update(visible=False),
+            # gr.update(visible=False),
+            gr.update(value=LOCALES["notification"][language]["success_msg"], visible=True, elem_classes=["notification"])
         ]
 
         return response
@@ -460,4 +463,4 @@ class IDPhotoProcessor:
     @staticmethod
     def _create_error_response(language):
         """创建错误响应"""
-        return [gr.update(value=None) for _ in range(4)] + [None, gr.update(value=LOCALES["size_mode"][language]["custom_size_eror"], visible=True), None]
+        return [gr.update(value=None) for _ in range(7)] + [gr.update(value=LOCALES["size_mode"][language]["custom_size_eror"], visible=True)]

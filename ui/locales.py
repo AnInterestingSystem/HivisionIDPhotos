@@ -517,6 +517,7 @@ LOCALES = {
             "internal_error": "Internal error. Please retry later.",
             "no_image_error": "Please upload an image first.",
             "face_error": "The number of faces is not equal to 1. Please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left.",
+            "success_msg": "saved. Go to the \"My ID Photo\" tab to view ",
         },
         "zh": {
             "label": "通知",
@@ -525,6 +526,7 @@ LOCALES = {
             "internal_error": "内部错误。请稍后重试。",
             "no_image_error": "请先上传照片。",
             "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型。",
+            "success_msg": "标准照和排版照已保存，移步“我的证件照”查看。",
         },
         "ja": {
             "label": "通知",
@@ -533,6 +535,7 @@ LOCALES = {
             "internal_error": "内部エラーです。しばらくしてからもう一度お試しください。",
             "no_image_error": "まず画像をアップロードしてください。",
             "face_error": "顔の数が1ではありません。1つの顔を含む画像をアップロードしてください。実際の顔の数が1の場合、検出モデルの精度の問題かもしれません。左側で別の顔検出モデルに切り替えるか。",
+            "success_msg": "標準写真とレイアウト写真が保存されていますので、「マイ証明写真」タブからご覧ください。",
         },
         "ko": {
             "label": "알림",
@@ -541,6 +544,7 @@ LOCALES = {
             "internal_error": "내부 오류입니다. 나중에 다시 시도하세요.",
             "no_image_error": "먼저 이미지를 업로드해 주세요.",
             "face_error": "얼굴 수가 1이 아닙니다. 단일 얼굴이 있는 이미지를 업로드해 주세요. 실제 얼굴 수가 1인 경우 감지 모델의 정확도 문제일 수 있습니다. 왼쪽에서 다른 얼굴 감지 모델로.",
+            "success_msg": "표준사진과 레이아웃 사진이 저장되었습니다. '내 증명사진' 탭에서 확인하실 수 있습니다.",
         },
     },
     "standard_photo": {
