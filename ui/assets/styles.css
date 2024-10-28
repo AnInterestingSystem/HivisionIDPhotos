@@ -20,6 +20,7 @@ footer {
 
 .right-container {
   border: #CEE9F2 solid 8px;
+  --block-radius: null;
 }
 
 .right-row-container {
