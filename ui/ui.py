@@ -149,7 +149,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
 
             # ---------------- 右半边 UI ----------------
             with gr.Column(elem_classes=["right-container"]):
-                notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], visible=False)
+                notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], elem_classes=["notification"], visible=False)
                 with gr.Row(elem_classes=["right-row-container"]):
                     # 标准照
                     img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png")
