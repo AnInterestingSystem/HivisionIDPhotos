@@ -66,6 +66,8 @@ class IDPhotoProcessor:
         elif task_id == -2:
             return self._handle_photo_generation_error(language, "input_image_too_large_error")
         elif task_id == -3:
+            return self._handle_photo_generation_error(language, "no_quota_error")
+        elif task_id == -4:
             return self._handle_photo_generation_error(language, "internal_error")
 
         # 初始化参数

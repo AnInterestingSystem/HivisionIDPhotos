@@ -47,11 +47,16 @@ def create_task(request: gr.Request, input_image: ndarray) -> int:
         return -3
 
     status_response = response.json()
-    if status_response.get("status") != "SUCCESS":
-        logging.error(f"Failed to create task. Reason: {status_response.get('reason')}")
-        return -3
-
-    return status_response["payload"]
+    if status_response.get("status") == "SUCCESS":
+        return status_response["payload"]
+    else:
+        if status_response.get("reason") == "NotLogin":
+            return -1
+        elif status_response.get("reason") == "NoQuota":
+            return -3
+        else:
+            logging.error(f"Failed to create task. Reason: {status_response.get('reason')}")
+            return -4
 
 
 def save_failed_task(request: gr.Request, task_id: int) -> None:
