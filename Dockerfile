@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -19,6 +19,7 @@ COPY ui ./ui
 
 EXPOSE 8080
 
+ENV PYTHONIOENCODING=utf-8
 ENV ENV=prod
 
 CMD ["python", "app.py", "--port", "8080"]
