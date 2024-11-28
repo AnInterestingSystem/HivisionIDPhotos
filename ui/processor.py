@@ -10,8 +10,7 @@ from hivision.creator.choose_handler import choose_handler
 from hivision.creator.layout_calculator import (generate_layout_array, generate_layout_image, )
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
-from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark,
-                            save_image_dpi_to_bytes, )
+from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
 from .locales import LOCALES
 from .request import create_task, save_failed_task, save_task_result
 from .utils import range_check
@@ -56,6 +55,7 @@ class IDPhotoProcessor:
         sharpen_strength=0,
         saturation_strength=0,
         plugin_option=[],
+        print_switch=None,
     ):
         if input_image is None:
             return self._handle_photo_generation_error(language, "no_image_error")
@@ -90,23 +90,18 @@ class IDPhotoProcessor:
             jpeg_format_option = True
         else:
             jpeg_format_option = False
-        # 五寸相纸选项
-        if LOCALES["plugin"][language]["choices"][3] in plugin_option:
-            five_inch_option = True
-        else:
-            five_inch_option = False
 
-        idphoto_json = self._initialize_idphoto_json(mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, five_inch_option)
+        idphoto_json = self._initialize_idphoto_json(mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, print_switch)
 
         # 处理尺寸模式
-        size_result = self._process_size_mode(idphoto_json, language, size_list_option, custom_size_height, custom_size_width, custom_size_height_mm, custom_size_width_mm)
+        size_result = self._process_size_mode(idphoto_json, language, size_list_option, custom_size_height, custom_size_width, custom_size_height_mm, custom_size_width_mm, )
         if isinstance(size_result, list):
             save_failed_task(request, task_id)
 
             return size_result  # 返回错误信息
 
         # 处理颜色模式
-        self._process_color_mode(idphoto_json, language, color_option, custom_color_r, custom_color_g, custom_color_b, custom_color_hex_value)
+        self._process_color_mode(idphoto_json, language, color_option, custom_color_r, custom_color_g, custom_color_b, custom_color_hex_value, )
 
         # 如果设置了自定义KB大小
         if idphoto_json["image_kb_mode"] == LOCALES["image_kb"][language]["choices"][-1]:
@@ -143,7 +138,7 @@ class IDPhotoProcessor:
             return self._handle_photo_generation_error(language, "face_error")
 
         # 后处理生成的照片
-        response = self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
+        response = self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, )
 
         save_task_result(request, task_id, jpeg_format_option, response[0], response[1], response[2], response[3], response[4]["value"], response[5]["value"])
 
@@ -151,7 +146,7 @@ class IDPhotoProcessor:
 
     # 初始化idphoto_json字典
     @staticmethod
-    def _initialize_idphoto_json(mode_option, color_option, render_option, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, five_inch_option):
+    def _initialize_idphoto_json(mode_option, color_option, render_option, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, print_switch, ):
         """初始化idphoto_json字典"""
         return {
             "size_mode": mode_option,
@@ -162,11 +157,11 @@ class IDPhotoProcessor:
             "custom_image_dpi": None,
             "layout_photo_crop_line_option": layout_photo_crop_line_option,
             "jpeg_format_option": jpeg_format_option,
-            "five_inch_option": five_inch_option,
+            "print_switch": print_switch,
         }
 
     # 处理尺寸模式
-    def _process_size_mode(self, idphoto_json, language, size_list_option, custom_size_height, custom_size_width, custom_size_height_mm, custom_size_width_mm):
+    def _process_size_mode(self, idphoto_json, language, size_list_option, custom_size_height, custom_size_width, custom_size_height_mm, custom_size_width_mm, ):
         """处理尺寸模式"""
         # 如果选择了尺寸列表
         if idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][0]:
@@ -191,7 +186,7 @@ class IDPhotoProcessor:
 
     # 处理颜色模式
     @staticmethod
-    def _process_color_mode(idphoto_json, language, color_option, custom_color_r, custom_color_g, custom_color_b, custom_color_hex_value):
+    def _process_color_mode(idphoto_json, language, color_option, custom_color_r, custom_color_g, custom_color_b, custom_color_hex_value, ):
         """处理颜色模式"""
         # 如果选择了自定义颜色BGR
         if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-2]:
@@ -254,7 +249,7 @@ class IDPhotoProcessor:
         return [gr.update(value=None) for _ in range(7)] + [gr.update(value=LOCALES["notification"][language][error_type], visible=True, elem_classes=["notification"])]
 
     # 处理生成的照片
-    def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color):
+    def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, ):
         """处理生成的照片"""
         result_image_standard, result_image_hd, _, _, _, _ = result
         result_image_standard_png = np.uint8(result_image_standard)
@@ -265,16 +260,16 @@ class IDPhotoProcessor:
 
         # 添加水印
         if watermark_option == LOCALES["watermark_switch"][language]["choices"][1]:
-            result_image_standard, result_image_hd = self._add_watermark(result_image_standard, result_image_hd, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color)
+            result_image_standard, result_image_hd = self._add_watermark(result_image_standard, result_image_hd, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, )
 
         # 生成排版照片
-        result_image_layout, result_image_layout_visible = self._generate_image_layout(idphoto_json, result_image_standard, language)
+        result_image_layout, result_image_layout_visible = self._generate_image_layout(idphoto_json, result_image_standard, language, )
 
         # 生成模板照片
-        result_image_template, result_image_template_visible = self._generate_image_template(idphoto_json, result_image_hd, language)
+        result_image_template, result_image_template_visible = self._generate_image_template(idphoto_json, result_image_hd, language, )
 
         # 调整图片大小
-        output_image_path_dict = self._save_image(result_image_standard, result_image_hd, result_image_layout, idphoto_json, format="jpeg" if idphoto_json["jpeg_format_option"] else "png")
+        output_image_path_dict = self._save_image(result_image_standard, result_image_hd, result_image_layout, idphoto_json, format="jpeg" if idphoto_json["jpeg_format_option"] else "png", )
 
         # 返回
         if result_image_layout is not None:
@@ -309,17 +304,35 @@ class IDPhotoProcessor:
 
     # 生成排版照片
     @staticmethod
-    def _generate_image_layout(idphoto_json, result_image_standard, language):
+    def _generate_image_layout(idphoto_json, result_image_standard, language, ):
         """生成排版照片"""
         # 如果选择了只换底，则不生成排版照片
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
             return None, False
 
+        # 预设排版照尺寸
+        SIX_INCH = [1205, 1795]
+        FIVE_INCH = [1051, 1500]
+        A4 = [2479, 3508]
+        THREE_R = [1051, 1500]
+        FOUR_R = [1205, 1795]
+
+        # 预设排版照尺寸字典
+        PRESET_LAYOUT_SIZE = {
+            LOCALES["print_switch"][language]["choices"][0]: SIX_INCH,
+            LOCALES["print_switch"][language]["choices"][1]: FIVE_INCH,
+            LOCALES["print_switch"][language]["choices"][2]: A4,
+            LOCALES["print_switch"][language]["choices"][3]: THREE_R,
+            LOCALES["print_switch"][language]["choices"][4]: FOUR_R,
+        }
+
+        choose_layout_size = PRESET_LAYOUT_SIZE[idphoto_json["print_switch"]]
+
         typography_arr, typography_rotate = generate_layout_array(
             input_height=idphoto_json["size"][0],
             input_width=idphoto_json["size"][1],
-            LAYOUT_HEIGHT=1205 if not idphoto_json["five_inch_option"] else 1051,
-            LAYOUT_WIDTH=1795 if not idphoto_json["five_inch_option"] else 1500,
+            LAYOUT_HEIGHT=choose_layout_size[0],
+            LAYOUT_WIDTH=choose_layout_size[1],
         )
 
         result_image_layout = generate_layout_image(
@@ -329,8 +342,8 @@ class IDPhotoProcessor:
             height=idphoto_json["size"][0],
             width=idphoto_json["size"][1],
             crop_line=idphoto_json["layout_photo_crop_line_option"],
-            LAYOUT_HEIGHT=1205 if not idphoto_json["five_inch_option"] else 1051,
-            LAYOUT_WIDTH=1795 if not idphoto_json["five_inch_option"] else 1500,
+            LAYOUT_HEIGHT=choose_layout_size[0],
+            LAYOUT_WIDTH=choose_layout_size[1],
         )
 
         return result_image_layout, True
@@ -346,13 +359,13 @@ class IDPhotoProcessor:
         """生成模板照片"""
         result_image_template_list = []
         for template_name in template_name_list:
-            result_image_template = generte_template_photo(template_name=template_name, input_image=result_image_hd)
+            result_image_template = generte_template_photo(template_name=template_name, input_image=result_image_hd, )
             result_image_template_list.append(result_image_template)
         return result_image_template_list, True
 
     # 添加水印
     @staticmethod
-    def _add_watermark(result_image_standard, result_image_hd, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color):
+    def _add_watermark(result_image_standard, result_image_hd, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, ):
         """添加水印"""
         watermark_params = {
             "text": watermark_text,
@@ -367,7 +380,7 @@ class IDPhotoProcessor:
         return result_image_standard, result_image_hd
 
     @staticmethod
-    def _save_image(result_image_standard, result_image_hd, result_image_layout, idphoto_json, format="png"):
+    def _save_image(result_image_standard, result_image_hd, result_image_layout, idphoto_json, format="png", ):
         # 设置输出路径（临时目录）
         import tempfile
         base_path = tempfile.mkdtemp()
@@ -394,7 +407,7 @@ class IDPhotoProcessor:
             output_paths["standard"]["path"] = output_paths["standard"]["path"].replace(f".{format}", f"_{custom_kb}kb.{format}")
 
             # 调整标准图像大小并保存
-            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=custom_dpi)
+            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=custom_dpi, )
             # 保存高清图像和排版图像
             save_image_dpi_to_bytes(result_image_hd, output_paths["hd"]["path"], dpi=custom_dpi)
             if result_image_layout is not None:
@@ -410,7 +423,7 @@ class IDPhotoProcessor:
                 if key == "layout" and result_image_layout is None:
                     continue
                 output_paths[key]["path"] += f"_{custom_dpi}dpi.{format}"
-                save_image_dpi_to_bytes(locals()[f"result_image_{key}"], output_paths[key]["path"], dpi=custom_dpi)
+                save_image_dpi_to_bytes(locals()[f"result_image_{key}"], output_paths[key]["path"], dpi=custom_dpi, )
 
             return output_paths
 
@@ -423,7 +436,7 @@ class IDPhotoProcessor:
                     output_paths[key]["path"] += f".{format}"
 
             # 只调整标准图像大小
-            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=300)
+            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=300, )
 
             # 保存高清图像和排版图像
             save_image_dpi_to_bytes(result_image_hd, output_paths["hd"]["path"], dpi=300)
@@ -456,7 +469,6 @@ class IDPhotoProcessor:
             result_layout_image_gr,
             result_image_template_gr,
             result_image_template_accordion_gr,
-            # gr.update(visible=False),
             gr.update(value=LOCALES["notification"][language]["success_msg"], visible=True, elem_classes=["notification"])
         ]
 
