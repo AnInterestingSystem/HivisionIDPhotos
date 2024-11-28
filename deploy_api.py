@@ -25,17 +25,21 @@ app.add_middleware(
 # 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        height: int = Form(413),
-        width: int = Form(295),
-        hd: bool = Form(True),
-        dpi: int = Form(300),
-        face_align: bool = Form(False),
-        head_measure_ratio: float = 0.2,
-        head_height_ratio: float = 0.45,
-        top_distance_max: float = 0.12,
-        top_distance_min: float = 0.10,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    height: int = Form(413),
+    width: int = Form(295),
+    hd: bool = Form(True),
+    dpi: int = Form(300),
+    face_align: bool = Form(False),
+    head_measure_ratio: float = Form(0.2),
+    head_height_ratio: float = Form(0.45),
+    top_distance_max: float = Form(0.12),
+    top_distance_min: float = Form(0.10),
+    brightness_strength: int = Form(0),
+    contrast_strength: int = Form(0),
+    sharpen_strength: int = Form(0),
+    saturation_strength: int = Form(0),
 ):
     # 如果传入了base64，则直接使用base64解码
     if input_image_base64:
@@ -59,6 +63,10 @@ async def idphoto_inference(
             head_height_ratio=head_height_ratio,
             head_top_range=(top_distance_max, top_distance_min),
             face_alignment=face_align,
+            brightness_strength=brightness_strength,
+            contrast_strength=contrast_strength,
+            sharpen_strength=sharpen_strength,
+            saturation_strength=saturation_strength,
         )
     except FaceError:
         result_message = {"status": False}
@@ -82,9 +90,9 @@ async def idphoto_inference(
 # 人像抠图接口
 @app.post("/human_matting")
 async def human_matting_inference(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        dpi: int = Form(300),
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    dpi: int = Form(300),
 ):
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)
@@ -97,7 +105,7 @@ async def human_matting_inference(
     choose_handler(creator)
 
     try:
-        result = creator(img, change_bg_only=True)
+        result = creator(img, change_bg_only=True, )
     except FaceError:
         result_message = {"status": False}
 
@@ -113,12 +121,12 @@ async def human_matting_inference(
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        color: str = Form("000000"),
-        kb: int = Form(None),
-        dpi: int = Form(300),
-        render: int = Form(0),
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    color: str = Form("000000"),
+    kb: int = Form(None),
+    dpi: int = Form(300),
+    render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
 
@@ -132,7 +140,7 @@ async def photo_add_background(
     color = hex_to_rgb(color)
     color = (color[2], color[1], color[0])
 
-    result_image = add_background(img, bgr=color, mode=render_choice[render]).astype(np.uint8)
+    result_image = add_background(img, bgr=color, mode=render_choice[render], ).astype(np.uint8)
 
     result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
     if kb:
@@ -151,12 +159,12 @@ async def photo_add_background(
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        height: int = Form(413),
-        width: int = Form(295),
-        kb: int = Form(None),
-        dpi: int = Form(300),
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    height: int = Form(413),
+    width: int = Form(295),
+    kb: int = Form(None),
+    dpi: int = Form(300),
 ):
     # try:
     if input_image_base64:
@@ -191,16 +199,16 @@ async def generate_layout_photos(
 # 透明图像添加水印接口
 @app.post("/watermark")
 async def watermark(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        text: str = Form("iKnow"),
-        size: int = 20,
-        opacity: float = 0.5,
-        angle: int = 30,
-        color: str = "#ADD8E6",
-        space: int = 25,
-        kb: int = Form(None),
-        dpi: int = Form(300),
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    text: str = Form("iKnow"),
+    size: int = 20,
+    opacity: float = 0.5,
+    angle: int = 30,
+    color: str = "#ADD8E6",
+    space: int = 25,
+    kb: int = Form(None),
+    dpi: int = Form(300),
 ):
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)
@@ -235,10 +243,10 @@ async def watermark(
 # 设置照片KB值接口(RGB图)
 @app.post("/set_kb")
 async def set_kb(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        dpi: int = Form(300),
-        kb: int = Form(50),
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    dpi: int = Form(300),
+    kb: int = Form(50),
 ):
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)
@@ -268,16 +276,16 @@ async def set_kb(
 # 证件照智能裁剪接口
 @app.post("/idphoto_crop")
 async def idphoto_crop_inference(
-        input_image: UploadFile = File(None),
-        input_image_base64: str = Form(None),
-        height: int = Form(413),
-        width: int = Form(295),
-        hd: bool = Form(True),
-        dpi: int = Form(300),
-        head_measure_ratio: float = 0.2,
-        head_height_ratio: float = 0.45,
-        top_distance_max: float = 0.12,
-        top_distance_min: float = 0.10,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
+    height: int = Form(413),
+    width: int = Form(295),
+    hd: bool = Form(True),
+    dpi: int = Form(300),
+    head_measure_ratio: float = Form(0.2),
+    head_height_ratio: float = Form(0.45),
+    top_distance_max: float = Form(0.12),
+    top_distance_min: float = Form(0.10),
 ):
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)
@@ -292,14 +300,7 @@ async def idphoto_crop_inference(
     # 将字符串转为元组
     size = (int(height), int(width))
     try:
-        result = creator(
-            img,
-            size=size,
-            head_measure_ratio=head_measure_ratio,
-            head_height_ratio=head_height_ratio,
-            head_top_range=(top_distance_max, top_distance_min),
-            crop_only=True,
-        )
+        result = creator(img, size=size, head_measure_ratio=head_measure_ratio, head_height_ratio=head_height_ratio, head_top_range=(top_distance_max, top_distance_min), crop_only=True, )
     except FaceError:
         result_message = {"status": False}
     # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
