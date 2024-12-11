@@ -138,7 +138,7 @@ class IDPhotoProcessor:
             return self._handle_photo_generation_error(language, "face_error")
 
         # 后处理生成的照片
-        response = self._process_generated_photo(result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, )
+        response = self._process_generated_photo(request, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, )
 
         save_task_result(request, task_id, jpeg_format_option, response[0], response[1], response[2], response[3], response[4]["value"], response[5]["value"])
 
@@ -246,10 +246,10 @@ class IDPhotoProcessor:
     @staticmethod
     def _handle_photo_generation_error(language, error_type):
         """处理照片生成错误"""
-        return [gr.update(value=None) for _ in range(7)] + [gr.update(value=LOCALES["notification"][language][error_type], visible=True, elem_classes=["notification"])]
+        return [gr.update(value=None) for _ in range(7)] + [gr.update(value=LOCALES["notification"][language][error_type], visible=True)]
 
     # 处理生成的照片
-    def _process_generated_photo(self, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, ):
+    def _process_generated_photo(self, request, result, idphoto_json, language, watermark_option, watermark_text, watermark_text_size, watermark_text_opacity, watermark_text_angle, watermark_text_space, watermark_text_color, ):
         """处理生成的照片"""
         result_image_standard, result_image_hd, _, _, _, _ = result
         result_image_standard_png = np.uint8(result_image_standard)
@@ -276,6 +276,7 @@ class IDPhotoProcessor:
             result_image_layout = output_image_path_dict["layout"]["path"]
 
         return self._create_response(
+            request,
             output_image_path_dict["standard"]["path"],
             output_image_path_dict["hd"]["path"],
             result_image_standard_png,
@@ -459,7 +460,10 @@ class IDPhotoProcessor:
             return output_paths
 
     @staticmethod
-    def _create_response(result_image_standard, result_image_hd, result_image_standard_png, result_image_hd_png, result_layout_image_gr, result_image_template_gr, result_image_template_accordion_gr, language):
+    def _create_response(request, result_image_standard, result_image_hd, result_image_standard_png, result_image_hd_png, result_layout_image_gr, result_image_template_gr, result_image_template_accordion_gr, language):
+        user_agent = request.headers.get("user-agent", "")
+        msg = "wechat_success_msg" if "MicroMessenger" in user_agent or "miniProgram" in user_agent else "success_msg"
+
         """创建响应"""
         response = [
             result_image_standard,
@@ -469,7 +473,7 @@ class IDPhotoProcessor:
             result_layout_image_gr,
             result_image_template_gr,
             result_image_template_accordion_gr,
-            gr.update(value=LOCALES["notification"][language]["success_msg"], visible=True, elem_classes=["notification"])
+            gr.update(value=LOCALES["notification"][language][msg], visible=True)
         ]
 
         return response

@@ -172,16 +172,9 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
             def detect_client(request: gr.Request):
                 user_agent = request.headers.get("user-agent", "")
                 if "MicroMessenger" in user_agent or "miniProgram" in user_agent:
-                    return [
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                        gr.update(show_download_button=False, show_fullscreen_button=False),
-                    ]
+                    return [gr.update(show_download_button=False, show_fullscreen_button=False) for _ in range(6)]
                 else:
-                    return [gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), ]
+                    return [gr.update() for _ in range(6)]
 
             demo.load(fn=detect_client, outputs=[img_output_standard, img_output_standard_hd, img_output_layout, img_output_template, img_output_standard_png, img_output_standard_hd_png])
 
