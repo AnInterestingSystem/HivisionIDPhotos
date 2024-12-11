@@ -110,7 +110,7 @@ def save_task_result(
     }
     with (open(img_output_standard, "rb") as standard_file,
           # open(img_output_standard_hd, "rb") as hd_file,
-          open(img_output_layout, "rb") as layout_file):
+          ):
         # matting_standard_pil_image = Image.fromarray(img_output_standard_png)
         # matting_standard_image_bytes_io = io.BytesIO()
         # matting_standard_pil_image.save(matting_standard_image_bytes_io, format="PNG")
@@ -125,24 +125,31 @@ def save_task_result(
         files = {
             "standard-file": (f"standard-file.{extension_name}", standard_file, f"image/{extension_name}"),
             # "hd-file": (f"hd-file.{extension_name}", hd_file, f"image/{extension_name}"),
-            "layout-file": (f"layout-file.{extension_name}", layout_file, f"image/{extension_name}"),
             # "matting-standard-file": ("matting-standard-file.png", matting_standard_image_bytes, "image/png"),
             # "matting-hd-file": ("matting-hd-file.png", matting_hd_image_bytes, "image/png"),
         }
+        layout_file = None
+        try:
+            if img_output_layout is not None:
+                layout_file = open(img_output_layout, "rb")
+                files["layout-file"] = (f"layout-file.{extension_name}", layout_file, f"image/{extension_name}"),
 
-        # for i in range(len(img_output_templates)):
-        #     template_pil_image = Image.fromarray(img_output_templates[0])
-        #     template_image_bytes_io = io.BytesIO()
-        #     template_pil_image.save(template_image_bytes_io, format="PNG")
-        #     template_image_bytes = template_image_bytes_io.getvalue()
-        #     files[f"template-file-{i}"] = (f"template-file-{i}.png", template_image_bytes, "image/png")
+            # for i in range(len(img_output_templates)):
+            #     template_pil_image = Image.fromarray(img_output_templates[0])
+            #     template_image_bytes_io = io.BytesIO()
+            #     template_pil_image.save(template_image_bytes_io, format="PNG")
+            #     template_image_bytes = template_image_bytes_io.getvalue()
+            #     files[f"template-file-{i}"] = (f"template-file-{i}.png", template_image_bytes, "image/png")
 
-        response = requests.post(f"{chatbot_backend_base_url}/photoEdit/saveTask", headers=headers, params=params, files=files)
-        if response.status_code != 200:
-            logging.error(f"Failed to save task. Response status code: {response.status_code}")
-            return
+            response = requests.post(f"{chatbot_backend_base_url}/photoEdit/saveTask", headers=headers, params=params, files=files)
+            if response.status_code != 200:
+                logging.error(f"Failed to save task. Response status code: {response.status_code}")
+                return
 
-        status_response = response.json()
-        if status_response.get("status") != "SUCCESS":
-            logging.error(f"Failed to save task. Reason: {status_response.get('reason')}")
-            return
+            status_response = response.json()
+            if status_response.get("status") != "SUCCESS":
+                logging.error(f"Failed to save task. Reason: {status_response.get('reason')}")
+                return
+        finally:
+            if layout_file is not None:
+                layout_file.close()
