@@ -155,11 +155,11 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                 notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], elem_classes=["notification"], visible=False)
                 with gr.Row(elem_classes=["right-row-container"]):
                     # 标准照
-                    img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", )
+                    img_output_standard = gr.Gallery(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", show_fullscreen_button=False, )
                     # 高清照
                     img_output_standard_hd = gr.Image(label=LOCALES["hd_photo"][default_lang]["label"], height=350, format="png", )
                 # 排版照
-                img_output_layout = gr.Image(label=LOCALES["layout_photo"][default_lang]["label"], height=350, format="png", elem_classes=["right-row-container"])
+                img_output_layout = gr.Image(label=LOCALES["layout_photo"][default_lang]["label"], height=350, format="png", elem_classes=["right-row-container"], )
                 # 模版照片
                 with gr.Accordion(LOCALES["template_photo"][default_lang]["label"], open=True, elem_classes=["label-wrap"]) as template_image_accordion:
                     img_output_template = gr.Gallery(label=LOCALES["template_photo"][default_lang]["label"], height=350, format="png", )
