@@ -1,6 +1,8 @@
 import os
 import pathlib
 
+import json
+
 import gradio as gr
 from gradio import Blocks
 
@@ -18,6 +20,22 @@ def load_header(fp):
         content = f.read()
     return content
 
+def detect_client(request: gr.Request):  # Gradio会自动传入request对象
+    headers = request.headers
+    user_agent = request.headers.get("user-agent", "")
+    host = request.client.host
+    data = {
+        "user_agent": request.headers.get("user-agent", ""),
+        "host": request.client.host
+    }
+    # 在函数内部打印
+    print("client type")
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+    print("client type2")
+    return {
+        "ip": host,
+        "user_agent": user_agent
+    }
 
 def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language: list):
     # 加载环境变量DEFAULT_LANG, 如果有且在language中，则将DEFAULT_LANG设置为环境变量
@@ -27,6 +45,9 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         default_lang = language[0]
 
     with demo:
+        output = gr.JSON()
+        demo.load(fn=detect_client, outputs=output)
+
         # gr.HTML(load_header(os.path.join(root_dir, "ui/assets/header.html")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
@@ -155,7 +176,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                 notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], elem_classes=["notification"], visible=False)
                 with gr.Row(elem_classes=["right-row-container"]):
                     # 标准照
-                    img_output_standard = gr.Gallery(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", show_fullscreen_button=False, )
+                    img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", show_fullscreen_button=False, )
                     # 高清照
                     img_output_standard_hd = gr.Image(label=LOCALES["hd_photo"][default_lang]["label"], height=350, format="png", )
                 # 排版照

@@ -21,7 +21,6 @@ app = FastAPI()
 async def get_text_file():
     return FileResponse(os.path.join(root_dir, "ui/assets/AXanVx083s.txt"))
 
-
 blocks = gr.Blocks(title="iKnow", css_paths=[os.path.join(root_dir, "ui/assets/styles.css")], theme=theme, delete_cache=(86400, 86400))
 processor = IDPhotoProcessor()
 create_ui(blocks, processor, root_dir, LANGUAGE)
