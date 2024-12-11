@@ -132,7 +132,7 @@ def save_task_result(
         try:
             if img_output_layout is not None:
                 layout_file = open(img_output_layout, "rb")
-                files["layout-file"] = (f"layout-file.{extension_name}", layout_file, f"image/{extension_name}"),
+                files["layout-file"] = (f"layout-file.{extension_name}", layout_file, f"image/{extension_name}")
 
             # for i in range(len(img_output_templates)):
             #     template_pil_image = Image.fromarray(img_output_templates[0])
