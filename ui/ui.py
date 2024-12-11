@@ -1,8 +1,6 @@
 import os
 import pathlib
 
-import json
-
 import gradio as gr
 from gradio import Blocks
 
@@ -20,22 +18,6 @@ def load_header(fp):
         content = f.read()
     return content
 
-def detect_client(request: gr.Request):  # Gradio会自动传入request对象
-    headers = request.headers
-    user_agent = request.headers.get("user-agent", "")
-    host = request.client.host
-    data = {
-        "user_agent": request.headers.get("user-agent", ""),
-        "host": request.client.host
-    }
-    # 在函数内部打印
-    print("client type")
-    print(json.dumps(data, indent=2, ensure_ascii=False))
-    print("client type2")
-    return {
-        "ip": host,
-        "user_agent": user_agent
-    }
 
 def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language: list):
     # 加载环境变量DEFAULT_LANG, 如果有且在language中，则将DEFAULT_LANG设置为环境变量
@@ -45,9 +27,6 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
         default_lang = language[0]
 
     with demo:
-        output = gr.JSON()
-        demo.load(fn=detect_client, outputs=output)
-
         # gr.HTML(load_header(os.path.join(root_dir, "ui/assets/header.html")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
@@ -176,7 +155,7 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                 notification = gr.Text(label=LOCALES["notification"][default_lang]["label"], elem_classes=["notification"], visible=False)
                 with gr.Row(elem_classes=["right-row-container"]):
                     # 标准照
-                    img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", show_fullscreen_button=False, )
+                    img_output_standard = gr.Image(label=LOCALES["standard_photo"][default_lang]["label"], height=350, format="png", )
                     # 高清照
                     img_output_standard_hd = gr.Image(label=LOCALES["hd_photo"][default_lang]["label"], height=350, format="png", )
                 # 排版照
@@ -189,6 +168,22 @@ def create_ui(demo: Blocks, processor: IDPhotoProcessor, root_dir: str, language
                     with gr.Row():
                         img_output_standard_png = gr.Image(label=LOCALES["standard_photo_png"][default_lang]["label"], height=350, format="png", elem_id="standard_photo_png", )
                         img_output_standard_hd_png = gr.Image(label=LOCALES["hd_photo_png"][default_lang]["label"], height=350, format="png", elem_id="hd_photo_png", )
+
+            def detect_client(request: gr.Request):
+                user_agent = request.headers.get("user-agent", "")
+                if "MicroMessenger" in user_agent or "miniProgram" in user_agent:
+                    return [
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                        gr.update(show_download_button=False, show_fullscreen_button=False),
+                    ]
+                else:
+                    return [gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), ]
+
+            demo.load(fn=detect_client, outputs=[img_output_standard, img_output_standard_hd, img_output_layout, img_output_template, img_output_standard_png, img_output_standard_hd_png])
 
             # ---------------- 多语言切换函数 ----------------
             def change_language(language):
