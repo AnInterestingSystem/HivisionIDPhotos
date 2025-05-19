@@ -313,11 +313,7 @@ class IDPhotoProcessor:
 
         # 预设排版照尺寸字典
         PRESET_LAYOUT_SIZE = {
-            choice: shape
-            for choice, shape in zip(
-                LOCALES["print_switch"][language]["choices"],
-                LOCALES["print_switch"]["shape"]
-            )
+            choice: shape for choice, shape in zip(LOCALES["print_switch"][language]["choices"], LOCALES["print_switch"]["shape"])
         }
 
         choose_layout_size = PRESET_LAYOUT_SIZE[idphoto_json["print_switch"]]
