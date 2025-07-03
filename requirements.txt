@@ -1,12 +1,12 @@
-opencv-python>=4.8.1.78
-onnxruntime>=1.15.0
-numpy<=1.26.4
+opencv-python
+onnxruntime
+numpy
 requests
 mtcnn-runtime
 tqdm
 starlette
 
-gradio>=4.43.0
+gradio
 fastapi
 uvicorn
 
