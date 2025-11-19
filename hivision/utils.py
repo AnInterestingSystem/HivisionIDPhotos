@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PIL import Image
-import io
-import numpy as np
-import cv2
 import base64
+import io
+
+import cv2
+import numpy as np
+from PIL import Image
+
 from hivision.plugin.watermark import Watermarker, WatermarkerStyles
 
 
@@ -37,9 +39,10 @@ def resize_image_to_kb(input_image: np.ndarray, output_image_path: str = None, t
     Resize an image to a target size in KB.
     将图像调整大小至目标文件大小（KB）。
 
-    :param input_image_path: Path to the input image. 输入图像的路径。
+    :param input_image: Input image as a NumPy array. 输入图像，类型是NumPy数组。
     :param output_image_path: Path to save the resized image. 保存调整大小后的图像的路径。
     :param target_size_kb: Target size in KB. 目标文件大小（KB）。
+    :param dpi: DPI of the image. 图像的DPI。
 
     Example:
     resize_image_to_kb('input_image.jpg', 'output_image.jpg', 50)
@@ -83,7 +86,7 @@ def resize_image_to_kb(input_image: np.ndarray, output_image_path: str = None, t
             if output_image_path:
                 with open(output_image_path, "wb") as f:
                     f.write(img_byte_arr.getvalue())
-            
+
             return img_byte_arr.getvalue()
 
         # Reduce the quality if the image is still too large
@@ -178,17 +181,18 @@ def base64_2_numpy(base64_image: str) -> np.ndarray:
     # Remove the data URL prefix if present
     if base64_image.startswith('data:image'):
         base64_image = base64_image.split(',')[1]
-    
+
     # Decode base64 string to bytes
     img_bytes = base64.b64decode(base64_image)
-    
+
     # Convert bytes to numpy array
     img_array = np.frombuffer(img_bytes, dtype=np.uint8)
-    
+
     # Decode the image array
     img = cv2.imdecode(img_array, cv2.IMREAD_UNCHANGED)
-    
+
     return img
+
 
 # 字节流转base64
 def bytes_2_base64(img_byte_arr: bytes) -> str:
@@ -224,7 +228,7 @@ def hex_to_rgb(value):
     value = value.lstrip("#")
     length = len(value)
     return tuple(
-        int(value[i : i + length // 3], 16) for i in range(0, length, length // 3)
+        int(value[i: i + length // 3], 16) for i in range(0, length, length // 3)
     )
 
 
@@ -288,7 +292,7 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
     本函数的功能为为透明图像加上背景。
     :param input_image: numpy.array(4 channels), 透明图像
     :param bgr: tuple, 合成纯色底时的 BGR 值
-    :param new_background: numpy.array(3 channels)，合成自定义图像底时的背景图
+    :param mode: The mode of the background，背景图的类型。
     :return: output: 合成好的输出图像
     """
     height, width = input_image.shape[0], input_image.shape[1]
@@ -299,22 +303,24 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
             "The input image must have 4 channels. 输入图像必须有4个通道，即透明图像。"
         )
 
-    a_cal = a / 255
-    if mode == "pure_color":
-        # 纯色填充
-        b2 = np.full([height, width], bgr[0], dtype=int)
-        g2 = np.full([height, width], bgr[1], dtype=int)
-        r2 = np.full([height, width], bgr[2], dtype=int)
-    elif mode == "updown_gradient":
-        b2, g2, r2 = generate_gradient(bgr, width, height, mode="updown")
+    if mode == "not_process":
+        output = cv2.merge((b, g, r))
     else:
-        b2, g2, r2 = generate_gradient(bgr, width, height, mode="center")
+        a_cal = a / 255
+        if mode == "pure_color":
+            # 纯色填充
+            b2 = np.full([height, width], bgr[0], dtype=int)
+            g2 = np.full([height, width], bgr[1], dtype=int)
+            r2 = np.full([height, width], bgr[2], dtype=int)
+        elif mode == "updown_gradient":
+            b2, g2, r2 = generate_gradient(bgr, width, height, mode="updown")
+        else:
+            b2, g2, r2 = generate_gradient(bgr, width, height, mode="center")
 
-    output = cv2.merge(
-        ((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2)
-    )
+        output = cv2.merge(((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2))
 
     return output
+
 
 def add_background_with_image(input_image: np.ndarray, background_image: np.ndarray) -> np.ndarray:
     """
@@ -346,6 +352,7 @@ def add_background_with_image(input_image: np.ndarray, background_image: np.ndar
     )
 
     return output.astype(np.uint8)
+
 
 def add_watermark(
     image, text, size=50, opacity=0.5, angle=45, color="#8B8B1B", space=75

@@ -10,7 +10,8 @@ from hivision.creator.choose_handler import choose_handler
 from hivision.creator.layout_calculator import (generate_layout_array, generate_layout_image, )
 from hivision.error import FaceError, APIError
 from hivision.plugin.template.template_calculator import generte_template_photo
-from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark, save_image_dpi_to_bytes, )
+from hivision.utils import (add_background, add_background_with_image, resize_image_to_kb, add_watermark,
+                            save_image_dpi_to_bytes, )
 from .locales import LOCALES
 from .request import create_task, save_failed_task, save_task_result
 from .utils import range_check
@@ -188,8 +189,11 @@ class IDPhotoProcessor:
     @staticmethod
     def _process_color_mode(idphoto_json, language, color_option, custom_color_r, custom_color_g, custom_color_b, custom_color_hex_value, ):
         """处理颜色模式"""
+        # 如果选择了不处理
+        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][0]:
+            pass
         # 如果选择了自定义颜色BGR
-        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-2]:
+        elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-2]:
             idphoto_json["color_bgr"] = tuple(map(range_check, [custom_color_r, custom_color_g, custom_color_b]))
         # 如果选择了自定义颜色HEX
         elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-1]:
@@ -294,13 +298,16 @@ class IDPhotoProcessor:
         render_modes = {0: "pure_color", 1: "updown_gradient", 2: "center_gradient"}
         render_mode = render_modes[idphoto_json["render_mode"]]
 
-        if idphoto_json["color_mode"] != LOCALES["bg_color"][language]["choices"][-3]:
-            result_image_standard = np.uint8(add_background(result_image_standard, bgr=idphoto_json["color_bgr"], mode=render_mode))
-            result_image_hd = np.uint8(add_background(result_image_hd, bgr=idphoto_json["color_bgr"], mode=render_mode))
+        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][0]:
+            result_image_standard = np.uint8(add_background(result_image_standard, mode="not_process"))
+            result_image_hd = np.uint8(add_background(result_image_hd, mode="not_process"))
         # 如果选择了美式证件照
-        else:
+        elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-3]:
             result_image_standard = np.uint8(add_background_with_image(result_image_standard, background_image=cv2.imread(os.path.join(base_path, "assets", "american-style.png"))))
             result_image_hd = np.uint8(add_background_with_image(result_image_hd, background_image=cv2.imread(os.path.join(base_path, "assets", "american-style.png"))))
+        else:
+            result_image_standard = np.uint8(add_background(result_image_standard, bgr=idphoto_json["color_bgr"], mode=render_mode))
+            result_image_hd = np.uint8(add_background(result_image_hd, bgr=idphoto_json["color_bgr"], mode=render_mode))
         return result_image_standard, result_image_hd
 
     # 生成排版照片

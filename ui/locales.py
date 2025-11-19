@@ -182,22 +182,22 @@ LOCALES = {
     "bg_color": {
         "en": {
             "label": "Background color",
-            "choices": list(color_list_dict_EN.keys()) + ["American Style"] + ["Custom(RGB)", "Custom(HEX)"],
+            "choices": ["Not Process"] + list(color_list_dict_EN.keys()) + ["American Style"] + ["Custom(RGB)", "Custom(HEX)"],
             "develop": color_list_dict_EN,
         },
         "zh": {
             "label": "背景颜色",
-            "choices": list(color_list_dict_CN.keys()) + ["美式证件照"] + ["自定义(RGB)", "自定义(HEX)"],
+            "choices": ["不处理"] + list(color_list_dict_CN.keys()) + ["美式证件照"] + ["自定义(RGB)", "自定义(HEX)"],
             "develop": color_list_dict_CN,
         },
         "ja": {
             "label": "背景色",
-            "choices": list(color_list_dict_EN.keys()) + ["American Style"] + ["カスタム(RGB)", "カスタム(HEX)"],
+            "choices": ["元の背景を保持"] + list(color_list_dict_EN.keys()) + ["American Style"] + ["カスタム(RGB)", "カスタム(HEX)"],
             "develop": color_list_dict_EN,
         },
         "ko": {
             "label": "배경색",
-            "choices": list(color_list_dict_EN.keys()) + ["American Style"] + ["사용자 지정(RGB)", "사용자 지정(HEX)"],
+            "choices": ["배경 유지"] + list(color_list_dict_EN.keys()) + ["American Style"] + ["사용자 지정(RGB)", "사용자 지정(HEX)"],
             "develop": color_list_dict_EN,
         },
     },
