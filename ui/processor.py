@@ -81,13 +81,18 @@ class IDPhotoProcessor:
             face_alignment_option = True
         else:
             face_alignment_option = False
-        # 排版裁剪线选项
+        # 水平翻转选项
         if LOCALES["plugin"][language]["choices"][1] in plugin_option:
+            horizontal_flip_option = True
+        else:
+            horizontal_flip_option = False
+        # 排版裁剪线选项
+        if LOCALES["plugin"][language]["choices"][2] in plugin_option:
             layout_photo_crop_line_option = True
         else:
             layout_photo_crop_line_option = False
         # JPEG格式选项
-        if LOCALES["plugin"][language]["choices"][2] in plugin_option:
+        if LOCALES["plugin"][language]["choices"][3] in plugin_option:
             jpeg_format_option = True
         else:
             jpeg_format_option = False
@@ -132,6 +137,7 @@ class IDPhotoProcessor:
                 sharpen_strength,
                 saturation_strength,
                 face_alignment_option,
+                horizontal_flip_option,
             )
         except (FaceError, APIError):
             save_failed_task(request, task_id)
@@ -229,6 +235,7 @@ class IDPhotoProcessor:
         sharpen_strength,
         saturation_strength,
         face_alignment_option,
+        horizontal_flip_option,
     ):
         """生成证件照"""
         change_bg_only = (idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1])
@@ -244,6 +251,7 @@ class IDPhotoProcessor:
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
             face_alignment=face_alignment_option,
+            horizontal_flip=horizontal_flip_option,
         )
 
     # 处理照片生成错误
@@ -433,7 +441,7 @@ class IDPhotoProcessor:
                     output_paths[key]["path"] += f".{format}"
 
             # 只调整标准图像大小
-            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=300, )
+            resize_image_to_kb(result_image_standard, output_paths["standard"]["path"], custom_kb, dpi=300)
 
             # 保存高清图像和排版图像
             save_image_dpi_to_bytes(result_image_hd, output_paths["hd"]["path"], dpi=300)
