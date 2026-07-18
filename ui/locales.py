@@ -484,7 +484,7 @@ LOCALES = {
     "notification": {
         "en": {
             "label": "notification",
-            "access_error": "Please visit through https://app.iknow.plus.",
+            "access_error": "Please visit through https://app.iknow.host.",
             "input_image_too_large_error": "Image size exceeds the limitation. Please upload a smaller image.",
             "no_quota_error": "No enough credit. Please activate VIP to use it.",
             "internal_error": "Internal error. Please retry later.",
@@ -495,7 +495,7 @@ LOCALES = {
         },
         "zh": {
             "label": "通知",
-            "access_error": "请访问 https://app.iknow.plus 登录后使用该功能。",
+            "access_error": "请访问 https://app.iknow.host 登录后使用该功能。",
             "input_image_too_large_error": "图片大小超出限制。请上传较小的图片。",
             "no_quota_error": "ai豆不足。请开通VIP后使用。",
             "internal_error": "内部错误。请稍后重试。",
@@ -506,7 +506,7 @@ LOCALES = {
         },
         "ja": {
             "label": "通知",
-            "access_error": "https://app.iknow.plus からアクセスしてください。",
+            "access_error": "https://app.iknow.host からアクセスしてください。",
             "input_image_too_large_error": "画像サイズが制限を超えています。小さい画像をアップロードしてください。",
             "no_quota_error": "クレジットが足りません。使用するには VIP を有効にしてください。",
             "internal_error": "内部エラーです。しばらくしてからもう一度お試しください。",
@@ -517,7 +517,7 @@ LOCALES = {
         },
         "ko": {
             "label": "알림",
-            "access_error": "https://app.iknow.plus 를 통해 방문해주세요.",
+            "access_error": "https://app.iknow.host 를 통해 방문해주세요.",
             "input_image_too_large_error": "이미지 크기가 제한을 초과합니다. 더 작은 이미지를 업로드하세요.",
             "no_quota_error": "크레딧이 부족합니다. VIP를 활성화하여 사용하세요.",
             "internal_error": "내부 오류입니다. 나중에 다시 시도하세요.",

@@ -1,4 +1,6 @@
-FROM python:3.13-slim
+FROM python:3.14-slim
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -10,17 +12,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY requirements.txt .
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock ./
+
+RUN uv sync --locked --no-install-project --no-dev
 
 COPY hivision ./hivision
 COPY app.py .
 COPY ui ./ui
 
+RUN uv sync --locked --no-dev
+
 EXPOSE 8080
 
 ENV PYTHONIOENCODING=utf-8
 ENV ENV=prod
+ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["python", "app.py", "--port", "8080"]
+CMD ["uv", "run", "app.py", "--port", "8080"]

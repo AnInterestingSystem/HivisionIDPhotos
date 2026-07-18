@@ -11,7 +11,7 @@ INPUT_IMAGE_MAX_SIZE = 10_000_000
 
 chatbot_backend_base_url = "http://localhost:8080/api"
 if os.environ.get("ENV") == "prod":
-    chatbot_backend_base_url = "https://app.iknow.plus/api"
+    chatbot_backend_base_url = "https://app.iknow.host/api"
 
 
 def create_task(request: gr.Request, input_image: ndarray) -> int:

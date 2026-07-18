@@ -1,0 +1,17 @@
+[project]
+name = "HivisionIDPhotos"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "opencv-python",
+    "onnxruntime",
+    "numpy",
+    "requests",
+    "mtcnn-runtime",
+    "tqdm",
+    "starlette",
+    "gradio",
+    "fastapi",
+    "uvicorn",
+    "pillow",
+]
